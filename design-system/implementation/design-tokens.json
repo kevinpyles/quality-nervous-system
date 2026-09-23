@@ -1,0 +1,135 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "name": "QNS — Quality Nervous System",
+  "version": "1.0.0",
+  "description": "Single source of truth for the QNS design system. Dark ground, neon signal. Palette derived from KRE8 fluid-acrylic paintings (IMG_1023–1030).",
+  "color": {
+    "ground": {
+      "void":      { "value": "#05060B", "description": "Deepest background — page ground" },
+      "abyss":     { "value": "#090B12", "description": "Section alternation ground" },
+      "panel":     { "value": "#0F1220", "description": "Card / panel surface" },
+      "elevated":  { "value": "#171B2B", "description": "Raised surface (hover, popover)" },
+      "line":      { "value": "#242A3D", "description": "Hairline borders" },
+      "line-lume": { "value": "#38425C", "description": "Luminous hairline (nerve-index rule, active borders)" }
+    },
+    "ink": {
+      "bright": { "value": "#ECF1FF", "description": "Primary text" },
+      "dim":    { "value": "#9BA6C2", "description": "Secondary text" },
+      "faint":  { "value": "#616C8A", "description": "Tertiary text, captions" }
+    },
+    "signal": {
+      "discovery":      { "value": "#35C6FF", "description": "New information / inputs (afferent)" },
+      "discovery-deep": { "value": "#1C7BFF", "description": "Discovery, deep variant" },
+      "memory":         { "value": "#35E27A", "description": "Previously learned / feedback" },
+      "memory-lime":    { "value": "#A9F03C", "description": "Memory, lime variant" },
+      "decision":       { "value": "#FFC531", "description": "Reasoning / the core" },
+      "alert":          { "value": "#FF6A2C", "description": "Attention / action out (efferent)" },
+      "alert-hot":      { "value": "#FF2E4D", "description": "Alert, hot variant" },
+      "human":          { "value": "#F0F4FF", "description": "Human interaction / escalation" },
+      "ai-from":        { "value": "#2E86FF", "description": "AI processing gradient start" },
+      "ai-to":          { "value": "#A06BFF", "description": "AI processing gradient end" }
+    },
+    "accent": {
+      "cyan":    { "value": "#22E6D6" },
+      "magenta": { "value": "#FF2E88" },
+      "violet":  { "value": "#9B6BFF" }
+    },
+    "edge": {
+      "net": { "value": "#3E5B8F", "description": "Dim-neon logo network edges" },
+      "core-white": { "value": "#EAF3FF", "description": "Logo core node" },
+      "core-mid": { "value": "#8FD0FF", "description": "Core radial gradient mid stop (white-hot → blue)" }
+    }
+  },
+  "gradient": {
+    "ai":       { "value": "linear-gradient(135deg, #2E86FF, #A06BFF)" },
+    "spectrum": { "value": "linear-gradient(90deg, #35C6FF, #22E6D6, #35E27A, #A9F03C, #FFC531, #FF6A2C, #FF2E88, #9B6BFF)" },
+    "core":     { "value": "radial-gradient(closest-side, #FFFFFF, #8FD0FF 35%, #2E86FF 70%, transparent 100%)" },
+    "ground":   { "value": "radial-gradient(120% 90% at 50% 0%, #101528, #070810 60%, #05060B 100%)" }
+  },
+  "glow": {
+    "discovery": { "value": "0 0 24px rgba(53, 198, 255, 0.45)" },
+    "memory":    { "value": "0 0 24px rgba(53, 226, 122, 0.45)" },
+    "decision":  { "value": "0 0 24px rgba(255, 197, 49, 0.45)" },
+    "alert":     { "value": "0 0 24px rgba(255, 106, 44, 0.45)" },
+    "human":     { "value": "0 0 24px rgba(240, 244, 255, 0.45)" },
+    "ai":        { "value": "0 0 24px rgba(46, 134, 255, 0.45)" },
+    "cyan":      { "value": "0 0 24px rgba(34, 230, 214, 0.45)" },
+    "magenta":   { "value": "0 0 24px rgba(255, 46, 136, 0.45)" },
+    "violet":    { "value": "0 0 24px rgba(155, 107, 255, 0.45)" },
+    "core":      { "value": "0 0 60px rgba(46, 134, 255, 0.55), 0 0 120px rgba(46, 134, 255, 0.35)" }
+  },
+  "font": {
+    "display": { "value": "'Sora', system-ui, sans-serif", "description": "Display / headings" },
+    "body":    { "value": "'Manrope', system-ui, sans-serif", "description": "Body copy" },
+    "mono":    { "value": "'JetBrains Mono', ui-monospace, monospace", "description": "Data / code" },
+    "size": {
+      "xs":  { "value": "0.75rem" },
+      "sm":  { "value": "0.875rem" },
+      "base":{ "value": "1rem" },
+      "lg":  { "value": "1.125rem" },
+      "xl":  { "value": "1.375rem" },
+      "2xl": { "value": "1.75rem" },
+      "3xl": { "value": "2.5rem" },
+      "4xl": { "value": "3.5rem" },
+      "5xl": { "value": "5rem" },
+      "6xl": { "value": "7rem" }
+    },
+    "weight": {
+      "regular":  { "value": "400" },
+      "medium":   { "value": "500" },
+      "semibold": { "value": "600" },
+      "bold":     { "value": "700" },
+      "extrabold":{ "value": "800" }
+    },
+    "tracking": {
+      "tight":   { "value": "-0.02em" },
+      "tighter": { "value": "-0.04em" }
+    }
+  },
+  "space": {
+    "0":  { "value": "0" },
+    "1":  { "value": "0.25rem" },
+    "2":  { "value": "0.5rem" },
+    "3":  { "value": "0.75rem" },
+    "4":  { "value": "1rem" },
+    "6":  { "value": "1.5rem" },
+    "8":  { "value": "2rem" },
+    "12": { "value": "3rem" },
+    "16": { "value": "4rem" },
+    "24": { "value": "6rem" },
+    "36": { "value": "9rem" }
+  },
+  "radius": {
+    "sm":   { "value": "6px" },
+    "md":   { "value": "10px" },
+    "lg":   { "value": "18px" },
+    "xl":   { "value": "28px" },
+    "pill": { "value": "999px" }
+  },
+  "motion": {
+    "duration": {
+      "fast":   { "value": "160ms" },
+      "base":   { "value": "280ms" },
+      "slow":   { "value": "520ms" },
+      "signal": { "value": "3200ms" }
+    },
+    "ease": {
+      "standard": { "value": "cubic-bezier(0.4, 0, 0.2, 1)" },
+      "organic":  { "value": "cubic-bezier(0.65, 0, 0.35, 1)" }
+    }
+  },
+  "signalGeometry": {
+    "stroke": {
+      "background": { "value": "1" },
+      "secondary":  { "value": "1.5" },
+      "primary":    { "value": "2" },
+      "active":     { "value": "3" },
+      "hero":       { "value": "4" }
+    },
+    "linecap":  { "value": "round" },
+    "linejoin": { "value": "round" },
+    "passiveOpacity": { "value": "0.35" },
+    "minParallelGap": { "value": "8px" },
+    "minNodeClearance": { "value": "12px" }
+  }
+}

@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mark-VII UI System — Style Guide</title>
+<style>
+  :root {
+    /* ---- Surface & structure ---- */
+    --bg: #f6f1e7;
+    --bg-2: #efe7d8;
+    --glow-gold: rgba(196, 155, 58, .22);
+    --glow-red: rgba(180, 40, 35, .10);
+    --panel: rgba(255,255,255,.62);
+    --panel-strong: rgba(255,255,255,.84);
+    --border: rgba(140,105,40,.24);
+    --line: rgba(90,70,40,.14);
+    --shadow: 0 20px 50px rgba(80,55,20,.14);
+    --input: rgba(255,255,255,.55);
+    --scrim: rgba(255,255,255,.40);
+
+    /* ---- Text ---- */
+    --text: #221c14;
+    --muted: #6f6455;
+    --faint: #a89a83;
+
+    /* ---- Brand / interactive (gold) ---- */
+    --gold: #a9750a;
+    --gold-2: #c99a2e;
+    --gold-soft: rgba(169,117,10,.14);
+    --gold-ring: rgba(169,117,10,.30);
+
+    /* ---- Semantic (locked meanings — see Usage Rules) ---- */
+    --red: #b0231f;
+    --red-soft: rgba(176,35,31,.12);
+    --green: #1f8a4c;
+    --green-soft: rgba(31,138,76,.12);
+
+    /* ---- Decorative-only motif (never a UI color token) ---- */
+    --reactor: #37c7e0;
+    --reactor-core: #eafcff;
+
+    --radius-xl: 26px;
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --radius-sm: 8px;
+  }
+
+  body.dark {
+    --bg: #16130f;
+    --bg-2: #1e1a14;
+    --glow-gold: rgba(255,199,79,.18);
+    --glow-red: rgba(227,52,47,.16);
+    --panel: rgba(30,26,20,.60);
+    --panel-strong: rgba(36,31,24,.80);
+    --border: rgba(255,255,255,.10);
+    --line: rgba(255,255,255,.08);
+    --shadow: 0 26px 70px rgba(0,0,0,.5);
+    --input: rgba(10,8,6,.35);
+    --scrim: rgba(10,8,6,.32);
+
+    --text: #f5efe3;
+    --muted: #b3a692;
+    --faint: #6f6455;
+
+    --gold: #f2c14e;
+    --gold-2: #ffd76a;
+    --gold-soft: rgba(242,193,78,.16);
+    --gold-ring: rgba(255,215,106,.35);
+
+    --red: #ff6b5c;
+    --red-soft: rgba(255,107,92,.16);
+    --green: #4ade91;
+    --green-soft: rgba(74,222,145,.16);
+  }
+
+  * { box-sizing: border-box; }
+  html { color-scheme: light; scroll-behavior: smooth; }
+  body.dark { color-scheme: dark; }
+  html, body { margin: 0; min-height: 100%; }
+
+  body {
+    position: relative;
+    padding: 0 20px 80px;
+    background:
+      radial-gradient(circle at 12% 0%, var(--glow-gold), transparent 30%),
+      radial-gradient(circle at 88% 6%, var(--glow-red), transparent 26%),
+      linear-gradient(160deg, var(--bg), var(--bg-2));
+    color: var(--text);
+    font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    transition: background .28s ease, color .28s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+  }
+
+  .wrap { width: min(1180px, 100%); margin: 0 auto; }
+
+  code, .mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  a { color: inherit; }
+
+  /* ---- Top bar ---- */
+  .topbar {
+    position: sticky; top: 0; z-index: 30;
+    display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+    padding: 14px 22px; margin: 0 -20px 28px;
+    background: var(--panel-strong);
+    backdrop-filter: blur(18px) saturate(150%);
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+    border-bottom: 1px solid var(--line);
+  }
+  .mark-badge {
+    width: 34px; height: 34px; border-radius: 9px; flex: 0 0 auto;
+    display: grid; place-items: center;
+    background: linear-gradient(135deg, var(--gold), var(--red));
+    color: #1a1410; font-weight: 900; font-size: 12px; letter-spacing: -.02em;
+  }
+  .topbar-title { font-weight: 800; letter-spacing: -.01em; font-size: 15px; white-space: nowrap; }
+  .topbar-nav { display: flex; gap: 4px; flex-wrap: wrap; flex: 1 1 auto; }
+  .topbar-nav a {
+    text-decoration: none; color: var(--muted); font-size: 12.5px; font-weight: 700;
+    padding: 7px 10px; border-radius: 8px; white-space: nowrap;
+  }
+  .topbar-nav a:hover { color: var(--text); background: var(--gold-soft); }
+
+  .theme-toggle {
+    display: inline-flex; align-items: center; gap: 10px;
+    min-height: 38px; padding: 0 12px; border-radius: 12px;
+    background: var(--panel); border: 1px solid var(--line);
+    color: var(--muted); font-size: 12.5px; font-weight: 700; user-select: none;
+    flex: 0 0 auto;
+  }
+  .switch { position: relative; width: 42px; height: 24px; flex: 0 0 auto; }
+  .switch input { position: absolute; opacity: 0; pointer-events: none; }
+  .slider {
+    position: absolute; inset: 0; background: rgba(140,120,90,.30);
+    border: 1px solid var(--line); border-radius: 999px; cursor: pointer; transition: .2s;
+  }
+  .slider::after {
+    content: ""; position: absolute; width: 16px; height: 16px; left: 3px; top: 3px;
+    border-radius: 50%; background: white; box-shadow: 0 2px 6px rgba(0,0,0,.2); transition: .2s;
+  }
+  .switch input:checked + .slider { background: linear-gradient(135deg, var(--gold), var(--gold-2)); }
+  .switch input:checked + .slider::after { transform: translateX(18px); }
+
+  button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visible, [tabindex]:focus-visible {
+    outline: 3px solid var(--gold-ring); outline-offset: 2px;
+  }
+
+  /* ---- Sections ---- */
+  section { margin-bottom: 46px; scroll-margin-top: 90px; }
+  .eyebrow {
+    color: var(--gold); font-size: 11px; font-weight: 800; letter-spacing: .16em;
+    text-transform: uppercase; margin-bottom: 8px;
+  }
+  h1 {
+    margin: 0; font-size: clamp(32px, 4.6vw, 52px); line-height: .98; letter-spacing: -.03em;
+    text-transform: uppercase;
+  }
+  h2 {
+    font-size: 22px; letter-spacing: -.01em; margin: 0 0 6px; text-transform: uppercase;
+  }
+  .section-desc { color: var(--muted); font-size: 14px; max-width: 720px; line-height: 1.6; margin: 0 0 22px; }
+  .subtitle { max-width: 680px; color: var(--muted); font-size: 15px; line-height: 1.65; margin: 14px 0 0; }
+
+  .glass {
+    background: var(--panel); border: 1px solid var(--border);
+    box-shadow: var(--shadow); border-radius: var(--radius-xl);
+    backdrop-filter: blur(20px) saturate(150%); -webkit-backdrop-filter: blur(20px) saturate(150%);
+  }
+
+  .hero { padding: 40px; margin-bottom: 34px; position: relative; overflow: hidden; }
+  .hero-rules { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; margin-top: 26px; }
+  .rule-card { padding: 16px 18px; border-radius: var(--radius-md); background: var(--panel-strong); border: 1px solid var(--line); }
+  .rule-card .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; vertical-align: middle; }
+  .rule-card b { font-size: 13.5px; }
+  .rule-card p { margin: 6px 0 0; color: var(--muted); font-size: 12.5px; line-height: 1.55; }
+
+  /* ---- Color swatches ---- */
+  .token-groups { display: flex; flex-direction: column; gap: 26px; }
+  .token-group-title { font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  .swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+  .swatch {
+    display: flex; flex-direction: column; width: 100%;
+    border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--line);
+    background: var(--panel-strong); cursor: pointer; text-align: left; font: inherit; color: inherit;
+    padding: 0; transition: transform .14s ease;
+  }
+  .swatch:hover { transform: translateY(-2px); }
+  .swatch-fill { display: block; height: 58px; flex: 0 0 auto; }
+  .swatch-body { display: flex; flex-direction: column; padding: 10px 12px 12px; }
+  .swatch-name { display: block; font-size: 12.5px; font-weight: 750; }
+  .swatch-hex { display: block; font-size: 11px; color: var(--muted); margin-top: 2px; min-height: 14px; }
+  .swatch-desc { display: block; font-size: 11px; color: var(--faint); margin-top: 6px; line-height: 1.4; }
+  .copied-flag { color: var(--green); font-weight: 700; }
+
+  /* ---- Typography ---- */
+  .type-row { display: flex; align-items: baseline; gap: 18px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .type-row:last-child { border-bottom: none; }
+  .type-meta { width: 150px; flex: 0 0 auto; color: var(--muted); font-size: 11.5px; }
+  .type-meta .mono { display: block; margin-top: 3px; color: var(--faint); }
+  .type-sample { min-width: 0; }
+  .t-eyebrow { color: var(--gold); font-size: 11px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+  .t-h1 { font-size: 40px; text-transform: uppercase; letter-spacing: -.02em; margin: 4px 0 0; }
+  .t-h2 { font-size: 22px; text-transform: uppercase; letter-spacing: -.01em; margin: 0; }
+  .t-h3 { font-size: 16px; font-weight: 750; margin: 0; }
+  .t-body { font-size: 15px; line-height: 1.65; margin: 0; max-width: 560px; }
+  .t-muted { font-size: 13px; color: var(--muted); margin: 0; }
+  .t-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 13.5px; background: var(--scrim); padding: 8px 10px; border-radius: 8px; display: inline-block; }
+
+  /* ---- Spacing & radius ---- */
+  .scale-block { display: flex; align-items: flex-end; gap: 18px; flex-wrap: wrap; }
+  .scale-item { text-align: center; }
+  .scale-swatch { background: linear-gradient(135deg, var(--gold), var(--gold-2)); border-radius: 4px; margin: 0 auto 8px; }
+  .scale-label { font-size: 11px; color: var(--muted); }
+  .radius-row { display: flex; gap: 18px; flex-wrap: wrap; }
+  .radius-item { text-align: center; }
+  .radius-swatch { width: 72px; height: 72px; background: var(--panel-strong); border: 1px solid var(--border); margin-bottom: 8px; }
+  .radius-label { font-size: 11px; color: var(--muted); }
+
+  /* ---- Elevation & glow ---- */
+  .glow-row { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }
+  .elevation-card {
+    width: 200px; height: 110px; border-radius: var(--radius-lg);
+    background: var(--panel-strong); border: 1px solid var(--border); box-shadow: var(--shadow);
+    display: grid; place-items: center; color: var(--muted); font-size: 12px; text-align: center; padding: 10px;
+  }
+  .reactor-demo { display: flex; align-items: center; gap: 14px; }
+  .reactor-dot {
+    width: 40px; height: 40px; border-radius: 50%; position: relative; flex: 0 0 auto;
+    background: radial-gradient(circle at 50% 45%, var(--reactor-core), var(--reactor) 55%, rgba(55,199,224,0) 78%);
+    box-shadow: 0 0 18px 4px rgba(55,199,224,.45);
+    animation: pulse 2.6s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 14px 2px rgba(55,199,224,.35); }
+    50% { box-shadow: 0 0 26px 8px rgba(55,199,224,.6); }
+  }
+  .reactor-note { font-size: 12px; color: var(--muted); max-width: 320px; line-height: 1.5; }
+  .focus-demo-btn { }
+
+  /* ---- Buttons ---- */
+  .btn-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  button.demo-btn {
+    appearance: none; min-height: 44px; border-radius: 12px; padding: 0 20px;
+    font: inherit; font-weight: 750; cursor: pointer; border: 1px solid var(--line);
+    background: var(--panel-strong); color: var(--text);
+    transition: transform .16s ease, border-color .16s ease, filter .16s ease;
+  }
+  button.demo-btn:hover { transform: translateY(-1px); }
+  button.demo-btn.primary { border-color: transparent; color: #1a1410; background: linear-gradient(135deg, var(--gold), var(--gold-2)); }
+  button.demo-btn.primary:hover { filter: brightness(1.06); }
+  button.demo-btn.ghost { background: transparent; }
+  button.demo-btn.danger { border-color: transparent; color: #fff; background: linear-gradient(135deg, var(--red), #7a1512); }
+  button.demo-btn.danger:hover { filter: brightness(1.08); }
+  button.demo-btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+  .btn-caption { font-size: 11.5px; color: var(--muted); margin-top: 8px; }
+
+  /* ---- Forms ---- */
+  .form-demo { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 18px; margin-bottom: 18px; }
+  .form-panel { border-radius: var(--radius-xl); overflow: hidden; background: var(--panel); border: 1px solid var(--border); }
+  .form-panel-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--line); font-weight: 750; font-size: 13px; }
+  .form-panel textarea {
+    width: 100%; min-height: 110px; display: block; resize: vertical; border: 0; outline: 0;
+    padding: 16px 18px; background: var(--input); color: var(--text);
+    font: 14px/1.6 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+  .check-row { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; margin-top: 4px; }
+  .check { display: inline-flex; align-items: center; gap: 9px; font-size: 14px; font-weight: 650; cursor: pointer; user-select: none; }
+  .check input { width: 18px; height: 18px; accent-color: var(--gold); }
+
+  /* ---- Diff tokens ---- */
+  .diff-sample {
+    padding: 20px; border-radius: var(--radius-lg); background: var(--scrim);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 15px; line-height: 1.8;
+  }
+  .tok { border-radius: 4px; padding: 1px 3px; margin: 0 -1px; }
+  .tok.same { background: var(--green-soft); color: var(--green); box-shadow: inset 0 -1px 0 rgba(20,150,96,.26); }
+  .tok.diff { background: var(--red-soft); color: var(--red); box-shadow: inset 0 -1px 0 rgba(217,75,91,.24); }
+  .diff-legend { display: flex; gap: 18px; margin-top: 12px; font-size: 12px; color: var(--muted); }
+  .diff-legend span { display: inline-flex; align-items: center; gap: 7px; }
+  .legend-dot { width: 9px; height: 9px; border-radius: 50%; }
+
+  .badge-row { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 16px; }
+  .status-badge { display: inline-flex; align-items: center; gap: 7px; font-weight: 700; font-size: 12.5px; padding: 7px 12px; border-radius: 999px; background: var(--panel-strong); border: 1px solid var(--line); }
+  .status-badge .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .status-badge.pass { color: var(--green); }
+  .status-badge.pass .dot { background: var(--green); }
+  .status-badge.fail { color: var(--red); }
+  .status-badge.fail .dot { background: var(--red); }
+
+  /* ---- HUD panel / stat tiles ---- */
+  .hud-panel { position: relative; padding: 22px; border-radius: var(--radius-xl); background: var(--panel); border: 1px solid var(--border); }
+  .hud-corner { position: absolute; width: 16px; height: 16px; border-color: var(--gold); opacity: .8; }
+  .hud-corner.tl { top: 8px; left: 8px; border-top: 2px solid; border-left: 2px solid; border-top-left-radius: 4px; }
+  .hud-corner.tr { top: 8px; right: 8px; border-top: 2px solid; border-right: 2px solid; border-top-right-radius: 4px; }
+  .hud-corner.bl { bottom: 8px; left: 8px; border-bottom: 2px solid; border-left: 2px solid; border-bottom-left-radius: 4px; }
+  .hud-corner.br { bottom: 8px; right: 8px; border-bottom: 2px solid; border-right: 2px solid; border-bottom-right-radius: 4px; }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; margin-top: 18px; }
+  .stat { padding: 16px; border-radius: 16px; background: var(--panel-strong); border: 1px solid var(--line); }
+  .stat-label { color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+  .stat-value { margin-top: 6px; font-size: 24px; font-weight: 850; letter-spacing: -.03em; }
+  .stat.gold .stat-value { color: var(--gold); }
+  .stat.good .stat-value { color: var(--green); }
+  .stat.bad .stat-value { color: var(--red); }
+
+  /* ---- Motifs ---- */
+  .motif-row { display: flex; gap: 30px; flex-wrap: wrap; align-items: center; }
+  .divider-demo { display: flex; align-items: center; gap: 10px; width: 220px; }
+  .divider-line { flex: 1; height: 1px; background: var(--line); }
+  .divider-diamond { width: 6px; height: 6px; background: var(--gold); transform: rotate(45deg); }
+
+  /* ---- Rules list ---- */
+  .rules-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
+  .rule-item { padding: 16px 18px; border-radius: var(--radius-md); background: var(--panel); border: 1px solid var(--line); font-size: 13.5px; line-height: 1.55; }
+  .rule-item b { display: block; margin-bottom: 4px; }
+  .rule-item.do b { color: var(--green); }
+  .rule-item.dont b { color: var(--red); }
+
+  /* ---- Token mapping table ---- */
+  table.mapping { width: 100%; border-collapse: collapse; margin-top: 10px; }
+  table.mapping th, table.mapping td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); font-size: 13px; }
+  table.mapping th { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; }
+  table.mapping td.mono { color: var(--text); }
+
+  footer { text-align: center; margin-top: 40px; color: var(--muted); font-size: 11.5px; }
+
+  @media (max-width: 900px) {
+    .hero-rules, .form-demo, .rules-grid { grid-template-columns: 1fr; }
+    .stat-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="mark-badge">MK</div>
+    <div class="topbar-title">Mark-VII UI System</div>
+    <nav class="topbar-nav">
+      <a href="#colors">Colors</a>
+      <a href="#type">Type</a>
+      <a href="#spacing">Spacing</a>
+      <a href="#elevation">Elevation</a>
+      <a href="#buttons">Buttons</a>
+      <a href="#forms">Forms</a>
+      <a href="#diff">Diff Tokens</a>
+      <a href="#panels">Panels</a>
+      <a href="#motion">Motion</a>
+      <a href="#rules">Usage Rules</a>
+      <a href="#mapping">Token Mapping</a>
+    </nav>
+    <label class="theme-toggle" for="darkMode">
+      <span>Suit up</span>
+      <span class="switch">
+        <input id="darkMode" type="checkbox" />
+        <span class="slider" aria-hidden="true"></span>
+      </span>
+    </label>
+  </div>
+
+  <main class="wrap">
+
+    <section class="hero glass">
+      <div class="eyebrow">Style Guide — v1</div>
+      <h1>Mark-VII Interface System</h1>
+      <p class="subtitle">
+        A Stark-inspired theme for Comparinator: classic Mark III/XLII red &amp; gold armor,
+        rendered as a clean, legible product UI with restrained HUD accents — not a costume.
+        Supports both a light ("powered down") and dark ("suit up") mode. Toggle the switch above to preview both.
+      </p>
+
+      <div class="hero-rules">
+        <div class="rule-card">
+          <b><span class="dot" style="background:var(--gold)"></span>Gold is the brand</b>
+          <p>Gold/brass is the <em>only</em> color used for buttons, links, focus rings, and active/checked states. If it's clickable, it's gold.</p>
+        </div>
+        <div class="rule-card">
+          <b><span class="dot" style="background:var(--red)"></span>Red means "different"</b>
+          <p>Red is reserved exclusively for diff/error semantics — the "different" highlight, destructive actions, failed status. Never decorative.</p>
+        </div>
+        <div class="rule-card">
+          <b><span class="dot" style="background:var(--green)"></span>Green means "match"</b>
+          <p>Green is reserved exclusively for match/success semantics. Together, red and green stay a dependable, unambiguous pair.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="colors">
+      <div class="eyebrow">01 — Foundation</div>
+      <h2>Color Tokens</h2>
+      <p class="section-desc">Every swatch reflects the <strong>current mode</strong> (toggle "Suit up" above) and is click-to-copy. Token names match Comparinator's existing CSS custom properties one-for-one, so re-skinning the app is a value swap, not a rewrite — see the Token Mapping table at the bottom.</p>
+
+      <div class="token-groups">
+        <div>
+          <div class="token-group-title">Surface &amp; Structure</div>
+          <div class="swatch-grid">
+            <button class="swatch" data-var="--bg"><span class="swatch-fill" style="background:var(--bg)"></span><span class="swatch-body"><span class="swatch-name">--bg</span><span class="swatch-hex mono"></span><span class="swatch-desc">Page background base</span></span></button>
+            <button class="swatch" data-var="--bg-2"><span class="swatch-fill" style="background:var(--bg-2)"></span><span class="swatch-body"><span class="swatch-name">--bg-2</span><span class="swatch-hex mono"></span><span class="swatch-desc">Page background gradient end</span></span></button>
+            <button class="swatch" data-var="--panel"><span class="swatch-fill" style="background:var(--panel)"></span><span class="swatch-body"><span class="swatch-name">--panel</span><span class="swatch-hex mono"></span><span class="swatch-desc">Glass panel fill</span></span></button>
+            <button class="swatch" data-var="--panel-strong"><span class="swatch-fill" style="background:var(--panel-strong)"></span><span class="swatch-body"><span class="swatch-name">--panel-strong</span><span class="swatch-hex mono"></span><span class="swatch-desc">Opaque panel / card fill</span></span></button>
+            <button class="swatch" data-var="--border"><span class="swatch-fill" style="background:var(--border)"></span><span class="swatch-body"><span class="swatch-name">--border</span><span class="swatch-hex mono"></span><span class="swatch-desc">Panel border (bronze hairline)</span></span></button>
+            <button class="swatch" data-var="--line"><span class="swatch-fill" style="background:var(--line)"></span><span class="swatch-body"><span class="swatch-name">--line</span><span class="swatch-hex mono"></span><span class="swatch-desc">Divider / inner hairline</span></span></button>
+          </div>
+        </div>
+
+        <div>
+          <div class="token-group-title">Text</div>
+          <div class="swatch-grid">
+            <button class="swatch" data-var="--text"><span class="swatch-fill" style="background:var(--text)"></span><span class="swatch-body"><span class="swatch-name">--text</span><span class="swatch-hex mono"></span><span class="swatch-desc">Primary text</span></span></button>
+            <button class="swatch" data-var="--muted"><span class="swatch-fill" style="background:var(--muted)"></span><span class="swatch-body"><span class="swatch-name">--muted</span><span class="swatch-hex mono"></span><span class="swatch-desc">Secondary / label text</span></span></button>
+            <button class="swatch" data-var="--faint"><span class="swatch-fill" style="background:var(--faint)"></span><span class="swatch-body"><span class="swatch-name">--faint</span><span class="swatch-hex mono"></span><span class="swatch-desc">Tertiary / caption text</span></span></button>
+          </div>
+        </div>
+
+        <div>
+          <div class="token-group-title">Brand / Interactive — Gold</div>
+          <div class="swatch-grid">
+            <button class="swatch" data-var="--gold"><span class="swatch-fill" style="background:var(--gold)"></span><span class="swatch-body"><span class="swatch-name">--gold</span><span class="swatch-hex mono"></span><span class="swatch-desc">Primary accent — buttons, links, active states</span></span></button>
+            <button class="swatch" data-var="--gold-2"><span class="swatch-fill" style="background:var(--gold-2)"></span><span class="swatch-body"><span class="swatch-name">--gold-2</span><span class="swatch-hex mono"></span><span class="swatch-desc">Gradient end / hover highlight</span></span></button>
+            <button class="swatch" data-var="--gold-soft"><span class="swatch-fill" style="background:var(--gold-soft)"></span><span class="swatch-body"><span class="swatch-name">--gold-soft</span><span class="swatch-hex mono"></span><span class="swatch-desc">Subtle wash / hover background</span></span></button>
+          </div>
+        </div>
+
+        <div>
+          <div class="token-group-title">Semantic — locked meanings, never reused</div>
+          <div class="swatch-grid">
+            <button class="swatch" data-var="--red"><span class="swatch-fill" style="background:var(--red)"></span><span class="swatch-body"><span class="swatch-name">--red</span><span class="swatch-hex mono"></span><span class="swatch-desc">Difference / error / destructive — only</span></span></button>
+            <button class="swatch" data-var="--red-soft"><span class="swatch-fill" style="background:var(--red-soft)"></span><span class="swatch-body"><span class="swatch-name">--red-soft</span><span class="swatch-hex mono"></span><span class="swatch-desc">Difference highlight background</span></span></button>
+            <button class="swatch" data-var="--green"><span class="swatch-fill" style="background:var(--green)"></span><span class="swatch-body"><span class="swatch-name">--green</span><span class="swatch-hex mono"></span><span class="swatch-desc">Match / success — only</span></span></button>
+            <button class="swatch" data-var="--green-soft"><span class="swatch-fill" style="background:var(--green-soft)"></span><span class="swatch-body"><span class="swatch-name">--green-soft</span><span class="swatch-hex mono"></span><span class="swatch-desc">Match highlight background</span></span></button>
+          </div>
+        </div>
+
+        <div>
+          <div class="token-group-title">Decorative motif only — not a UI color token</div>
+          <div class="swatch-grid">
+            <button class="swatch" data-var="--reactor"><span class="swatch-fill" style="background:var(--reactor)"></span><span class="swatch-body"><span class="swatch-name">--reactor</span><span class="swatch-hex mono"></span><span class="swatch-desc">Arc-reactor glow accent — decorative badges only, never text/buttons/status</span></span></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="type">
+      <div class="eyebrow">02 — Foundation</div>
+      <h2>Typography</h2>
+      <p class="section-desc">System sans throughout — no display or novelty face. The "HUD" feel comes from uppercase tracking and weight on headings, not a different typeface. Technical/diff content uses monospace, matching Comparinator's existing result panels.</p>
+
+      <div class="glass" style="padding: 24px 28px;">
+        <div class="type-row">
+          <div class="type-meta">Eyebrow<span class="mono">11px / 800 / .16em</span></div>
+          <div class="type-sample"><span class="t-eyebrow">Text Comparison Utility</span></div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">H1<span class="mono">clamp(32,4.6vw,52)/900</span></div>
+          <div class="type-sample"><span class="t-h1">Comparinator</span></div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">H2<span class="mono">22px / 800</span></div>
+          <div class="type-sample"><span class="t-h2">Highlighted Comparison</span></div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">H3<span class="mono">16px / 750</span></div>
+          <div class="type-sample"><span class="t-h3">Text A — Expected / Reference</span></div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">Body<span class="mono">15px / 1.65</span></div>
+          <div class="type-sample"><p class="t-body">Compare expected text against actual text, measure similarity and accuracy, and see exactly where the two versions agree or differ.</p></div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">Muted<span class="mono">13px / secondary</span></div>
+          <div class="type-sample"><p class="t-muted">Maximum 10,000 characters · Green = match · Red = difference</p></div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">Mono / technical<span class="mono">13.5px</span></div>
+          <div class="type-sample"><span class="t-mono">similarity: 74.2% · matching: 18 · different: 3</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="spacing">
+      <div class="eyebrow">03 — Foundation</div>
+      <h2>Spacing &amp; Radius</h2>
+      <p class="section-desc">An 8px base grid (with a 4px half-step for tight groupings), and four corner-radius steps carried over unchanged from Comparinator's existing panel system.</p>
+
+      <div class="glass" style="padding: 24px 28px; margin-bottom: 16px;">
+        <div class="scale-block">
+          <div class="scale-item"><div class="scale-swatch" style="width:4px;height:24px"></div><div class="scale-label">4</div></div>
+          <div class="scale-item"><div class="scale-swatch" style="width:8px;height:24px"></div><div class="scale-label">8</div></div>
+          <div class="scale-item"><div class="scale-swatch" style="width:12px;height:24px"></div><div class="scale-label">12</div></div>
+          <div class="scale-item"><div class="scale-swatch" style="width:16px;height:24px"></div><div class="scale-label">16</div></div>
+          <div class="scale-item"><div class="scale-swatch" style="width:24px;height:24px"></div><div class="scale-label">24</div></div>
+          <div class="scale-item"><div class="scale-swatch" style="width:32px;height:24px"></div><div class="scale-label">32</div></div>
+          <div class="scale-item"><div class="scale-swatch" style="width:48px;height:24px"></div><div class="scale-label">48</div></div>
+        </div>
+      </div>
+
+      <div class="glass" style="padding: 24px 28px;">
+        <div class="radius-row">
+          <div class="radius-item"><div class="radius-swatch" style="border-radius:var(--radius-sm)"></div><div class="radius-label">sm — 8px</div></div>
+          <div class="radius-item"><div class="radius-swatch" style="border-radius:var(--radius-md)"></div><div class="radius-label">md — 14px</div></div>
+          <div class="radius-item"><div class="radius-swatch" style="border-radius:var(--radius-lg)"></div><div class="radius-label">lg — 20px</div></div>
+          <div class="radius-item"><div class="radius-swatch" style="border-radius:var(--radius-xl)"></div><div class="radius-label">xl — 26px</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="elevation">
+      <div class="eyebrow">04 — Foundation</div>
+      <h2>Elevation &amp; Glow</h2>
+      <p class="section-desc">Panels lift with a soft warm shadow, not a hard drop shadow. Focus states get a gold glow ring (tab to the button below to see it live). The arc-reactor pulse is the one true animation in the system — reserved for a single decorative badge, and disabled automatically under <span class="mono">prefers-reduced-motion</span>.</p>
+
+      <div class="glow-row">
+        <div class="elevation-card">Panel shadow<br /><span class="mono" style="font-size:11px">--shadow</span></div>
+        <button class="demo-btn primary focus-demo-btn">Tab to me →</button>
+        <div class="reactor-demo">
+          <div class="reactor-dot" aria-hidden="true"></div>
+          <p class="reactor-note">Arc-reactor motif — decorative only. Not used for text, buttons, or status; see Usage Rules.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="buttons">
+      <div class="eyebrow">05 — Components</div>
+      <h2>Buttons</h2>
+      <p class="section-desc">One primary action per view. Gold fill for the primary action, outline/ghost for secondary actions, red only for destructive actions (e.g. a future "Clear all" if ever separated from Reset).</p>
+
+      <div class="glass" style="padding: 24px 28px;">
+        <div class="btn-row">
+          <div>
+            <button class="demo-btn primary">Compare Texts</button>
+            <div class="btn-caption">Primary</div>
+          </div>
+          <div>
+            <button class="demo-btn ghost">Reset</button>
+            <div class="btn-caption">Secondary / ghost</div>
+          </div>
+          <div>
+            <button class="demo-btn danger">Delete Comparison</button>
+            <div class="btn-caption">Destructive — red, used sparingly</div>
+          </div>
+          <div>
+            <button class="demo-btn primary" disabled>Compare Texts</button>
+            <div class="btn-caption">Disabled</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="forms">
+      <div class="eyebrow">06 — Components</div>
+      <h2>Form Controls</h2>
+      <p class="section-desc">Text panels, checkboxes, and the dark-mode toggle switch — live and interactive below, matching Comparinator's actual Text A / Text B inputs and comparison-option checkboxes.</p>
+
+      <div class="form-demo">
+        <div class="form-panel">
+          <div class="form-panel-head">Text A <span class="t-muted" style="font-weight:600">Expected</span></div>
+          <textarea placeholder="Paste the expected or reference text here...">The armor responds to thought.</textarea>
+        </div>
+        <div class="form-panel">
+          <div class="form-panel-head">Text B <span class="t-muted" style="font-weight:600">Actual</span></div>
+          <textarea placeholder="Paste the actual or comparison text here...">The suit responds to thought.</textarea>
+        </div>
+      </div>
+
+      <div class="glass" style="padding: 18px 22px;">
+        <div class="check-row">
+          <label class="check"><input type="checkbox" /> Ignore case</label>
+          <label class="check"><input type="checkbox" checked /> Ignore punctuation</label>
+          <label class="theme-toggle" for="darkMode2" style="background:var(--panel-strong)">
+            <span>Dark mode</span>
+            <span class="switch">
+              <input id="darkMode2" type="checkbox" class="mirror-toggle" />
+              <span class="slider" aria-hidden="true"></span>
+            </span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <section id="diff">
+      <div class="eyebrow">07 — Components</div>
+      <h2>Diff / Status Tokens</h2>
+      <p class="section-desc">The single most important visual language in the app. Green and red are locked to these two meanings everywhere — never reused for anything decorative.</p>
+
+      <div class="diff-sample">
+        <span class="tok same">The</span> <span class="tok same">armor</span> <span class="tok diff">responds</span> <span class="tok same">to</span> <span class="tok same">thought.</span>
+        <br />
+        <span class="tok same">The</span> <span class="tok diff">suit</span> <span class="tok same">responds</span> <span class="tok same">to</span> <span class="tok same">thought.</span>
+      </div>
+      <div class="diff-legend">
+        <span><i class="legend-dot" style="background:var(--green)"></i> Same / matching</span>
+        <span><i class="legend-dot" style="background:var(--red)"></i> Different, missing, or added</span>
+      </div>
+
+      <div class="badge-row">
+        <span class="status-badge pass"><i class="dot"></i> Passed</span>
+        <span class="status-badge fail"><i class="dot"></i> Failed</span>
+      </div>
+    </section>
+
+    <section id="panels">
+      <div class="eyebrow">08 — Components</div>
+      <h2>HUD Panel &amp; Stat Tiles</h2>
+      <p class="section-desc">Corner brackets are the one HUD flourish applied to panels — subtle, gold, and used only on primary containers (never nested inside other bracketed panels, to avoid visual noise).</p>
+
+      <div class="hud-panel">
+        <span class="hud-corner tl"></span><span class="hud-corner tr"></span>
+        <span class="hud-corner bl"></span><span class="hud-corner br"></span>
+        <h3 class="t-h3" style="margin-bottom: 4px;">Comparison Results</h3>
+        <p class="t-muted" style="margin:0 0 6px;">Similarity measures shared ordered content across both texts.</p>
+        <div class="stat-grid">
+          <div class="stat gold"><div class="stat-label">Similarity</div><div class="stat-value">86.7%</div></div>
+          <div class="stat gold"><div class="stat-label">Accuracy</div><div class="stat-value">91.2%</div></div>
+          <div class="stat good"><div class="stat-label">Matching</div><div class="stat-value">24</div></div>
+          <div class="stat bad"><div class="stat-label">Different</div><div class="stat-value">2</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="motifs">
+      <div class="eyebrow">09 — Components</div>
+      <h2>Motifs</h2>
+      <p class="section-desc">Small reusable decorative details, used sparingly.</p>
+      <div class="glass" style="padding: 22px 26px;">
+        <div class="motif-row">
+          <div class="divider-demo"><span class="divider-line"></span><span class="divider-diamond"></span><span class="divider-line"></span></div>
+          <div class="hud-corner tl" style="position:relative;top:0;left:0;display:inline-block;width:20px;height:20px"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="motion">
+      <div class="eyebrow">10 — Principles</div>
+      <h2>Motion</h2>
+      <p class="section-desc">Motion is functional, not decorative. Hover the buttons above to feel the timing live.</p>
+      <div class="rules-grid">
+        <div class="rule-item"><b>Hover lift</b>Interactive elements rise 1px and brighten slightly, 160ms ease. No bounce, no overshoot.</div>
+        <div class="rule-item"><b>Focus glow</b>A 3px gold ring appears instantly on keyboard focus (no fade-in) — clarity over polish for accessibility-critical feedback.</div>
+        <div class="rule-item"><b>Panel entrance</b>New results fade + rise 6px over 200ms when a comparison completes.</div>
+        <div class="rule-item"><b>Arc-reactor pulse</b>The one ambient animation in the system: a slow 2.6s glow breathe, used only on the decorative reactor badge.</div>
+        <div class="rule-item"><b>Reduced motion</b>All transitions and the reactor pulse collapse to near-zero duration under <span class="mono">prefers-reduced-motion: reduce</span>.</div>
+        <div class="rule-item"><b>Theme switch</b>Background and color transitions run at 280ms ease when toggling light/dark — slow enough to read as a mode change, fast enough not to feel laggy.</div>
+      </div>
+    </section>
+
+    <section id="rules">
+      <div class="eyebrow">11 — Principles</div>
+      <h2>Usage Rules</h2>
+      <div class="rules-grid">
+        <div class="rule-item do"><b>Do</b> Use gold for every clickable/actionable affordance — buttons, links, focus rings, checked toggles.</div>
+        <div class="rule-item dont"><b>Don't</b> Use red or green for anything that isn't a diff/status result. No red banners, no green decoration.</div>
+        <div class="rule-item do"><b>Do</b> Keep HUD flourishes (corner brackets, glow) on primary containers only — one layer, not nested.</div>
+        <div class="rule-item dont"><b>Don't</b> Let a HUD flourish reduce text contrast. Legibility of the diff results always wins over theming.</div>
+        <div class="rule-item do"><b>Do</b> Preserve all existing keyboard/ARIA behavior from Comparinator — the reskin changes tokens, not structure or interaction.</div>
+        <div class="rule-item dont"><b>Don't</b> Introduce the arc-reactor cyan anywhere outside its one decorative badge use.</div>
+      </div>
+    </section>
+
+    <section id="mapping">
+      <div class="eyebrow">12 — Handoff</div>
+      <h2>Token Mapping to Comparinator</h2>
+      <p class="section-desc">How this style guide's variables map onto <code>comparinator.html</code>'s existing <span class="mono">:root</span> custom properties. Same names carry over unchanged; only the interactive-accent tokens are renamed from blue → gold.</p>
+      <div class="glass" style="padding: 10px 22px 20px;">
+        <table class="mapping">
+          <thead><tr><th>Comparinator token</th><th>This guide</th><th>Change</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">--blue / --blue-2</td><td class="mono">--gold / --gold-2</td><td>Renamed — brand/interactive color, red&rarr;gold reassignment</td></tr>
+            <tr><td class="mono">--blue-soft</td><td class="mono">--gold-soft</td><td>Renamed, same role</td></tr>
+            <tr><td class="mono">--glow1 / --glow2</td><td class="mono">--glow-gold / --glow-red</td><td>Renamed — hero background glow accents</td></tr>
+            <tr><td class="mono">--green / --green-soft</td><td class="mono">--green / --green-soft</td><td>Unchanged name, recolored to warm-leaning success green</td></tr>
+            <tr><td class="mono">--red / --red-soft</td><td class="mono">--red / --red-soft</td><td>Unchanged name, recolored to Mark III/XLII red</td></tr>
+            <tr><td class="mono">--amber / --amber-soft</td><td class="mono">(kept — see Comparinator)</td><td>Warning tokens untouched by this reskin</td></tr>
+            <tr><td class="mono">--bg / --bg-2 / --text / --muted / --panel / --panel-strong / --border / --line / --shadow / --input / --scrim</td><td class="mono">same names</td><td>Unchanged names, values recolored warm</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer>Mark-VII UI System — style guide only. Next step: apply these tokens to comparinator.html.</footer>
+  </main>
+
+  <div id="toast" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--panel-strong);border:1px solid var(--line);border-radius:10px;padding:8px 16px;font-size:12.5px;font-weight:700;opacity:0;transition:opacity .18s ease, transform .18s ease;pointer-events:none;">Copied</div>
+
+  <script>
+    (() => {
+      const darkToggle = document.getElementById('darkMode');
+      const mirrorToggle = document.getElementById('darkMode2');
+
+      function applyDark(on) {
+        document.body.classList.toggle('dark', on);
+        darkToggle.checked = on;
+        if (mirrorToggle) mirrorToggle.checked = on;
+        refreshSwatches();
+      }
+
+      darkToggle.addEventListener('change', () => applyDark(darkToggle.checked));
+      if (mirrorToggle) mirrorToggle.addEventListener('change', () => applyDark(mirrorToggle.checked));
+
+      function refreshSwatches() {
+        document.querySelectorAll('.swatch[data-var]').forEach((el) => {
+          const varName = el.getAttribute('data-var');
+          const value = getComputedStyle(document.body).getPropertyValue(varName).trim();
+          const hexEl = el.querySelector('.swatch-hex');
+          if (hexEl) hexEl.textContent = value;
+        });
+      }
+
+      const toast = document.getElementById('toast');
+      let toastTimer = null;
+      document.querySelectorAll('.swatch[data-var]').forEach((el) => {
+        el.addEventListener('click', async () => {
+          const varName = el.getAttribute('data-var');
+          const value = getComputedStyle(document.body).getPropertyValue(varName).trim();
+          try {
+            await navigator.clipboard.writeText(value);
+          } catch {
+            /* clipboard permission unavailable — swatch still displays the value */
+          }
+          toast.textContent = 'Copied ' + varName + ' — ' + value;
+          toast.style.opacity = '1';
+          toast.style.transform = 'translateX(-50%) translateY(0)';
+          clearTimeout(toastTimer);
+          toastTimer = setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateX(-50%) translateY(20px)';
+          }, 1400);
+        });
+      });
+
+      refreshSwatches();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="QNS logo — Layered Net 3-1-2 neural mark">
+  <!-- Edges: dim-neon, Bézier, round caps (Signal Language) -->
+  <g fill="none" stroke="#3E5B8F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M7 10 C 15 12, 18 18, 23 22"/>
+    <path d="M7 24 C 13 24, 17 24, 22 24"/>
+    <path d="M7 38 C 15 36, 18 30, 23 26"/>
+    <path d="M26 22 C 31 19, 35 17, 41 16"/>
+    <path d="M26 26 C 31 29, 35 31, 41 32"/>
+  </g>
+  <!-- Input nodes: Discovery / Cyan / Violet -->
+  <circle cx="7" cy="10" r="3.4" fill="#35C6FF"/>
+  <circle cx="7" cy="24" r="3.4" fill="#22E6D6"/>
+  <circle cx="7" cy="38" r="3.4" fill="#9B6BFF"/>
+  <!-- Core: white-hot with halo -->
+  <circle cx="24" cy="24" r="7" fill="#2E86FF" opacity="0.35"/>
+  <circle cx="24" cy="24" r="4.6" fill="#EAF3FF"/>
+  <!-- Output nodes: Memory + Alert -->
+  <circle cx="41" cy="16" r="3.4" fill="#35E27A"/>
+  <circle cx="41" cy="32" r="3.4" fill="#FF6A2C"/>
+</svg>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="QNS favicon">
+  <!-- Dark rounded square so the mark reads on any tab background -->
+  <rect x="0" y="0" width="48" height="48" rx="11" fill="#05060B"/>
+  <g fill="none" stroke="#3E5B8F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 13 C 16 15, 19 19, 22 22"/>
+    <path d="M10 24 C 14 24, 17 24, 21 24"/>
+    <path d="M10 35 C 16 33, 19 29, 22 26"/>
+    <path d="M27 22 C 31 20, 34 19, 38 18"/>
+    <path d="M27 26 C 31 28, 34 29, 38 30"/>
+  </g>
+  <circle cx="10" cy="13" r="3.2" fill="#35C6FF"/>
+  <circle cx="10" cy="24" r="3.2" fill="#22E6D6"/>
+  <circle cx="10" cy="35" r="3.2" fill="#9B6BFF"/>
+  <circle cx="24" cy="24" r="6.4" fill="#2E86FF" opacity="0.4"/>
+  <circle cx="24" cy="24" r="4.2" fill="#EAF3FF"/>
+  <circle cx="38" cy="18" r="3.2" fill="#35E27A"/>
+  <circle cx="38" cy="30" r="3.2" fill="#FF6A2C"/>
+</svg>

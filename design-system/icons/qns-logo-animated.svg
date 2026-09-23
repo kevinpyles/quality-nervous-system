@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="QNS logo, animated — pulses travel from inputs through the core to outputs">
+  <style>
+    /* CSS cannot pause SMIL, so under reduced motion the animated core is
+       swapped for a static duplicate and the pulses are hidden. */
+    .qns-frozen { display: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .qns-pulse, .qns-living { display: none; }
+      .qns-frozen { display: inline; }
+    }
+  </style>
+  <!-- Edges -->
+  <g fill="none" stroke="#3E5B8F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path id="e1" d="M7 10 C 15 12, 18 18, 23 22"/>
+    <path id="e2" d="M7 24 C 13 24, 17 24, 22 24"/>
+    <path id="e3" d="M7 38 C 15 36, 18 30, 23 26"/>
+    <path id="e4" d="M26 22 C 31 19, 35 17, 41 16"/>
+    <path id="e5" d="M26 26 C 31 29, 35 31, 41 32"/>
+  </g>
+  <!-- Input nodes -->
+  <circle cx="7" cy="10" r="3.4" fill="#35C6FF"/>
+  <circle cx="7" cy="24" r="3.4" fill="#22E6D6"/>
+  <circle cx="7" cy="38" r="3.4" fill="#9B6BFF"/>
+  <!-- Core halo ripples + breathing core (living) -->
+  <g class="qns-living">
+    <circle cx="24" cy="24" r="7" fill="#2E86FF" opacity="0.35">
+      <animate attributeName="r" values="6.4;8.2;6.4" dur="3.2s" repeatCount="indefinite" calcMode="spline" keySplines="0.65 0 0.35 1; 0.65 0 0.35 1"/>
+      <animate attributeName="opacity" values="0.25;0.5;0.25" dur="3.2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="24" cy="24" r="4.6" fill="#EAF3FF">
+      <animate attributeName="r" values="4.3;5;4.3" dur="3.2s" repeatCount="indefinite" calcMode="spline" keySplines="0.65 0 0.35 1; 0.65 0 0.35 1"/>
+    </circle>
+  </g>
+  <!-- Static core (reduced motion) -->
+  <g class="qns-frozen">
+    <circle cx="24" cy="24" r="7" fill="#2E86FF" opacity="0.35"/>
+    <circle cx="24" cy="24" r="4.6" fill="#EAF3FF"/>
+  </g>
+  <!-- Output nodes -->
+  <circle cx="41" cy="16" r="3.4" fill="#35E27A"/>
+  <circle cx="41" cy="32" r="3.4" fill="#FF6A2C"/>
+  <!-- Firing pulses: inputs → core (staggered), then core → outputs -->
+  <circle class="qns-pulse" r="1.5" fill="#35C6FF" opacity="0">
+    <animateMotion dur="3.2s" begin="0s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear">
+      <mpath href="#e1"/>
+    </animateMotion>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="3.2s" begin="0s" repeatCount="indefinite"/>
+  </circle>
+  <circle class="qns-pulse" r="1.5" fill="#22E6D6" opacity="0">
+    <animateMotion dur="3.2s" begin="0.5s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear">
+      <mpath href="#e2"/>
+    </animateMotion>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="3.2s" begin="0.5s" repeatCount="indefinite"/>
+  </circle>
+  <circle class="qns-pulse" r="1.5" fill="#9B6BFF" opacity="0">
+    <animateMotion dur="3.2s" begin="1s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear">
+      <mpath href="#e3"/>
+    </animateMotion>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="3.2s" begin="1s" repeatCount="indefinite"/>
+  </circle>
+  <circle class="qns-pulse" r="1.5" fill="#35E27A" opacity="0">
+    <animateMotion dur="3.2s" begin="1.6s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear">
+      <mpath href="#e4"/>
+    </animateMotion>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="3.2s" begin="1.6s" repeatCount="indefinite"/>
+  </circle>
+  <circle class="qns-pulse" r="1.5" fill="#FF6A2C" opacity="0">
+    <animateMotion dur="3.2s" begin="2.1s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear">
+      <mpath href="#e5"/>
+    </animateMotion>
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.85;1" dur="3.2s" begin="2.1s" repeatCount="indefinite"/>
+  </circle>
+</svg>

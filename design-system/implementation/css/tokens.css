@@ -1,0 +1,129 @@
+/* ============================================================
+   QNS — Quality Nervous System · Design Tokens
+   Mirrors implementation/design-tokens.json 1:1.
+   Dark ground, neon signal. Never use a raw hex outside here.
+   ============================================================ */
+
+:root {
+  /* ---- Color · ground ---- */
+  --qns-ground-void:      #05060B;
+  --qns-ground-abyss:     #090B12;
+  --qns-ground-panel:     #0F1220;
+  --qns-ground-elevated:  #171B2B;
+  --qns-line:             #242A3D;
+  --qns-line-lume:        #38425C;
+
+  /* ---- Color · ink ---- */
+  --qns-ink-bright: #ECF1FF;
+  --qns-ink-dim:    #9BA6C2;
+  --qns-ink-faint:  #616C8A;
+
+  /* ---- Color · signals ---- */
+  --qns-signal-discovery:      #35C6FF;
+  --qns-signal-discovery-deep: #1C7BFF;
+  --qns-signal-memory:         #35E27A;
+  --qns-signal-memory-lime:    #A9F03C;
+  --qns-signal-decision:       #FFC531;
+  --qns-signal-alert:          #FF6A2C;
+  --qns-signal-alert-hot:      #FF2E4D;
+  --qns-signal-human:          #F0F4FF;
+  --qns-signal-ai-from:        #2E86FF;
+  --qns-signal-ai-to:          #A06BFF;
+
+  /* ---- Color · accents ---- */
+  --qns-accent-cyan:    #22E6D6;
+  --qns-accent-magenta: #FF2E88;
+  --qns-accent-violet:  #9B6BFF;
+
+  /* ---- Color · logo edges ---- */
+  --qns-edge-net:   #3E5B8F;
+  --qns-core-white: #EAF3FF;
+  --qns-core-mid:   #8FD0FF;
+
+  /* ---- Gradients ---- */
+  --qns-gradient-ai: linear-gradient(135deg, var(--qns-signal-ai-from), var(--qns-signal-ai-to));
+  --qns-gradient-spectrum: linear-gradient(90deg,
+      var(--qns-signal-discovery), var(--qns-accent-cyan), var(--qns-signal-memory),
+      var(--qns-signal-memory-lime), var(--qns-signal-decision), var(--qns-signal-alert),
+      var(--qns-accent-magenta), var(--qns-accent-violet));
+  --qns-gradient-core: radial-gradient(closest-side, #FFFFFF, #8FD0FF 35%, var(--qns-signal-ai-from) 70%, transparent 100%);
+  --qns-gradient-ground: radial-gradient(120% 90% at 50% 0%, #101528, #070810 60%, var(--qns-ground-void) 100%);
+
+  /* ---- Glows (per-signal, ~0.45 alpha) ---- */
+  --qns-glow-discovery: 0 0 24px rgba(53, 198, 255, 0.45);
+  --qns-glow-memory:    0 0 24px rgba(53, 226, 122, 0.45);
+  --qns-glow-decision:  0 0 24px rgba(255, 197, 49, 0.45);
+  --qns-glow-alert:     0 0 24px rgba(255, 106, 44, 0.45);
+  --qns-glow-human:     0 0 24px rgba(240, 244, 255, 0.45);
+  --qns-glow-ai:        0 0 24px rgba(46, 134, 255, 0.45);
+  --qns-glow-cyan:      0 0 24px rgba(34, 230, 214, 0.45);
+  --qns-glow-magenta:   0 0 24px rgba(255, 46, 136, 0.45);
+  --qns-glow-violet:    0 0 24px rgba(155, 107, 255, 0.45);
+  --qns-glow-core:      0 0 60px rgba(46, 134, 255, 0.55), 0 0 120px rgba(46, 134, 255, 0.35);
+
+  /* ---- Typography ---- */
+  --qns-font-display: 'Sora', system-ui, sans-serif;
+  --qns-font-body:    'Manrope', system-ui, sans-serif;
+  --qns-font-mono:    'JetBrains Mono', ui-monospace, monospace;
+  /* Wordmark: open decision — Sora / Space Grotesk / Chakra Petch / Michroma.
+     Swap this one variable after the human picks in logo-lab.html. */
+  --qns-font-wordmark: var(--qns-font-display);
+
+  --qns-size-xs:   0.75rem;
+  --qns-size-sm:   0.875rem;
+  --qns-size-base: 1rem;
+  --qns-size-lg:   1.125rem;
+  --qns-size-xl:   1.375rem;
+  --qns-size-2xl:  1.75rem;
+  --qns-size-3xl:  2.5rem;
+  --qns-size-4xl:  3.5rem;
+  --qns-size-5xl:  5rem;
+  --qns-size-6xl:  7rem;
+
+  --qns-weight-regular:   400;
+  --qns-weight-medium:    500;
+  --qns-weight-semibold:  600;
+  --qns-weight-bold:      700;
+  --qns-weight-extrabold: 800;
+
+  --qns-tracking-tight:   -0.02em;
+  --qns-tracking-tighter: -0.04em;
+
+  /* ---- Space (8px base) ---- */
+  --qns-space-0:  0;
+  --qns-space-1:  0.25rem;
+  --qns-space-2:  0.5rem;
+  --qns-space-3:  0.75rem;
+  --qns-space-4:  1rem;
+  --qns-space-6:  1.5rem;
+  --qns-space-8:  2rem;
+  --qns-space-12: 3rem;
+  --qns-space-16: 4rem;
+  --qns-space-24: 6rem;
+  --qns-space-36: 9rem;
+
+  /* ---- Radius ---- */
+  --qns-radius-sm:   6px;
+  --qns-radius-md:   10px;
+  --qns-radius-lg:   18px;
+  --qns-radius-xl:   28px;
+  --qns-radius-pill: 999px;
+
+  /* ---- Motion ---- */
+  --qns-duration-fast:   160ms;
+  --qns-duration-base:   280ms;
+  --qns-duration-slow:   520ms;
+  --qns-duration-signal: 3200ms;
+  --qns-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --qns-ease-organic:  cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* ---- Signal geometry ---- */
+  --qns-stroke-background: 1;
+  --qns-stroke-secondary:  1.5;
+  --qns-stroke-primary:    2;
+  --qns-stroke-active:     3;
+  --qns-stroke-hero:       4;
+  --qns-signal-passive-opacity: 0.35;
+  --qns-signal-parallel-gap: 8px;
+  --qns-signal-node-clearance: 12px;
+}

@@ -1,0 +1,351 @@
+/* ============================================================
+   QNS — Quality Nervous System · Base + Components
+   Composes everything from tokens.css (--qns-*). No raw hex.
+   Every artifact is a reusable component before it is a page.
+   ============================================================ */
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--qns-ground-void);
+  background-image: var(--qns-gradient-ground);
+  background-attachment: fixed;
+  color: var(--qns-ink-bright);
+  font-family: var(--qns-font-body);
+  font-size: var(--qns-size-base);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--qns-font-display);
+  letter-spacing: var(--qns-tracking-tight);
+  line-height: 1.12;
+  margin: 0 0 var(--qns-space-4);
+  font-weight: var(--qns-weight-bold);
+}
+h1 { font-size: clamp(var(--qns-size-3xl), 6vw, var(--qns-size-5xl)); letter-spacing: var(--qns-tracking-tighter); font-weight: var(--qns-weight-extrabold); }
+h2 { font-size: clamp(var(--qns-size-2xl), 4vw, var(--qns-size-3xl)); }
+h3 { font-size: var(--qns-size-xl); }
+p  { margin: 0 0 var(--qns-space-4); color: var(--qns-ink-dim); }
+p.lead { font-size: var(--qns-size-lg); color: var(--qns-ink-bright); }
+a  { color: var(--qns-signal-discovery); text-decoration: none; transition: color var(--qns-duration-fast) var(--qns-ease-standard); }
+a:hover { color: var(--qns-accent-cyan); }
+code, pre { font-family: var(--qns-font-mono); font-size: var(--qns-size-sm); }
+pre {
+  background: var(--qns-ground-panel);
+  border: 1px solid var(--qns-line);
+  border-radius: var(--qns-radius-md);
+  padding: var(--qns-space-4) var(--qns-space-6);
+  overflow-x: auto;
+  color: var(--qns-ink-dim);
+}
+::selection { background: var(--qns-signal-discovery-deep); color: var(--qns-ink-bright); }
+
+.qns-wrap { max-width: 1160px; margin: 0 auto; padding: 0 var(--qns-space-6); }
+.qns-section { padding: var(--qns-space-24) 0; position: relative; }
+
+/* Spectrum-filled display text */
+.qns-spectrum-text {
+  background: var(--qns-gradient-spectrum);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------- Nerve-index kicker (replaces generic eyebrow labels) ----------
+   A large neon numeral + a glowing hairline + a sentence-case label. */
+.qns-nerve-index {
+  display: flex;
+  align-items: center;
+  gap: var(--qns-space-4);
+  margin-bottom: var(--qns-space-6);
+}
+.qns-nerve-index__num {
+  font-family: var(--qns-font-mono);
+  font-size: var(--qns-size-3xl);
+  font-weight: var(--qns-weight-bold);
+  line-height: 1;
+  color: var(--qns-signal-discovery);
+  text-shadow: var(--qns-glow-discovery);
+}
+.qns-nerve-index--memory   .qns-nerve-index__num { color: var(--qns-signal-memory);   text-shadow: var(--qns-glow-memory); }
+.qns-nerve-index--decision .qns-nerve-index__num { color: var(--qns-signal-decision); text-shadow: var(--qns-glow-decision); }
+.qns-nerve-index--alert    .qns-nerve-index__num { color: var(--qns-signal-alert);    text-shadow: var(--qns-glow-alert); }
+.qns-nerve-index--magenta  .qns-nerve-index__num { color: var(--qns-accent-magenta);  text-shadow: var(--qns-glow-magenta); }
+.qns-nerve-index--violet   .qns-nerve-index__num { color: var(--qns-accent-violet);   text-shadow: var(--qns-glow-violet); }
+.qns-nerve-index__line {
+  flex: 0 0 72px;
+  height: 2px;
+  border-radius: var(--qns-radius-pill);
+  background: var(--qns-line-lume);
+  box-shadow: var(--qns-glow-discovery);
+  position: relative;
+  overflow: hidden;
+}
+.qns-nerve-index__line::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: var(--qns-gradient-spectrum);
+  transform: translateX(-100%);
+  animation: qns-line-sweep var(--qns-duration-signal) var(--qns-ease-organic) infinite;
+}
+@keyframes qns-line-sweep {
+  0% { transform: translateX(-100%); }
+  60%, 100% { transform: translateX(100%); }
+}
+.qns-nerve-index__label {
+  font-size: var(--qns-size-sm);
+  color: var(--qns-ink-dim);
+  font-weight: var(--qns-weight-semibold);
+}
+
+/* ---------- Signal marker (pulsing-orb brand line) ---------- */
+.qns-signal-marker {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--qns-space-3);
+  font-size: var(--qns-size-sm);
+  color: var(--qns-ink-dim);
+}
+.qns-signal-marker__orb {
+  width: 10px; height: 10px;
+  border-radius: var(--qns-radius-pill);
+  background: var(--qns-signal-discovery);
+  box-shadow: var(--qns-glow-discovery);
+  animation: qns-orb-breathe calc(var(--qns-duration-signal) / 2) var(--qns-ease-organic) infinite alternate;
+}
+@keyframes qns-orb-breathe {
+  from { transform: scale(0.85); opacity: 0.7; }
+  to   { transform: scale(1.15); opacity: 1; }
+}
+
+/* ---------- Button ---------- */
+.qns-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--qns-space-2);
+  padding: var(--qns-space-3) var(--qns-space-6);
+  border-radius: var(--qns-radius-pill);
+  border: 1px solid var(--qns-line-lume);
+  background: var(--qns-ground-elevated);
+  color: var(--qns-ink-bright);
+  font-family: var(--qns-font-display);
+  font-size: var(--qns-size-sm);
+  font-weight: var(--qns-weight-semibold);
+  cursor: pointer;
+  text-decoration: none;
+  /* hover must never move the button — position shifts under the pointer
+     cause un-hover/re-hover jitter at the edges */
+  transition: box-shadow var(--qns-duration-base) var(--qns-ease-standard),
+              border-color var(--qns-duration-base) var(--qns-ease-standard),
+              background-color var(--qns-duration-base) var(--qns-ease-standard);
+}
+.qns-btn:hover {
+  border-color: var(--qns-signal-discovery);
+  box-shadow: var(--qns-glow-discovery);
+  color: var(--qns-ink-bright);
+}
+.qns-btn--ai {
+  background: var(--qns-gradient-ai);
+  border-color: transparent;
+  box-shadow: var(--qns-glow-ai);
+}
+.qns-btn--ai:hover { box-shadow: var(--qns-glow-ai), var(--qns-glow-violet); border-color: transparent; }
+.qns-btn--ghost {
+  background: transparent;
+  border-color: var(--qns-line);
+  color: var(--qns-ink-dim);
+}
+.qns-btn--ghost:hover { color: var(--qns-ink-bright); }
+
+/* ---------- Card ---------- */
+.qns-card {
+  background: var(--qns-ground-panel);
+  border: 1px solid var(--qns-line);
+  border-radius: var(--qns-radius-lg);
+  padding: var(--qns-space-6);
+  transition: transform var(--qns-duration-base) var(--qns-ease-standard),
+              border-color var(--qns-duration-base) var(--qns-ease-standard),
+              box-shadow var(--qns-duration-base) var(--qns-ease-standard);
+}
+.qns-card:hover { transform: translateY(-3px); border-color: var(--qns-line-lume); }
+.qns-card--signal { border-top: 3px solid var(--qns-signal-discovery); box-shadow: var(--qns-glow-discovery); }
+.qns-card--signal.is-memory   { border-top-color: var(--qns-signal-memory);   box-shadow: var(--qns-glow-memory); }
+.qns-card--signal.is-decision { border-top-color: var(--qns-signal-decision); box-shadow: var(--qns-glow-decision); }
+.qns-card--signal.is-alert    { border-top-color: var(--qns-signal-alert);    box-shadow: var(--qns-glow-alert); }
+.qns-card--signal.is-human    { border-top-color: var(--qns-signal-human);    box-shadow: var(--qns-glow-human); }
+.qns-card h3 { margin-bottom: var(--qns-space-2); }
+.qns-card p:last-child { margin-bottom: 0; }
+
+/* ---------- Chip (signal-dot tagged) ---------- */
+.qns-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--qns-space-2);
+  padding: var(--qns-space-1) var(--qns-space-3);
+  border-radius: var(--qns-radius-pill);
+  border: 1px solid var(--qns-line);
+  background: var(--qns-ground-panel);
+  color: var(--qns-ink-dim);
+  font-family: var(--qns-font-mono);
+  font-size: var(--qns-size-xs);
+}
+.qns-chip::before {
+  content: "";
+  width: 7px; height: 7px;
+  border-radius: var(--qns-radius-pill);
+  background: var(--qns-signal-discovery);
+  box-shadow: var(--qns-glow-discovery);
+}
+.qns-chip--memory::before   { background: var(--qns-signal-memory);   box-shadow: var(--qns-glow-memory); }
+.qns-chip--decision::before { background: var(--qns-signal-decision); box-shadow: var(--qns-glow-decision); }
+.qns-chip--alert::before    { background: var(--qns-signal-alert);    box-shadow: var(--qns-glow-alert); }
+.qns-chip--human::before    { background: var(--qns-signal-human);    box-shadow: var(--qns-glow-human); }
+.qns-chip--ai::before       { background: var(--qns-gradient-ai);     box-shadow: var(--qns-glow-ai); }
+
+/* ---------- Swatch (color doc tile, click-to-copy) ---------- */
+.qns-swatch {
+  border: 1px solid var(--qns-line);
+  border-radius: var(--qns-radius-md);
+  overflow: hidden;
+  background: var(--qns-ground-panel);
+  cursor: pointer;
+  transition: transform var(--qns-duration-fast) var(--qns-ease-standard),
+              box-shadow var(--qns-duration-base) var(--qns-ease-standard);
+}
+.qns-swatch:hover { transform: translateY(-3px); box-shadow: var(--qns-glow-discovery); }
+.qns-swatch__chip { height: 76px; }
+.qns-swatch__meta { padding: var(--qns-space-3); }
+.qns-swatch__name { font-size: var(--qns-size-sm); font-weight: var(--qns-weight-semibold); color: var(--qns-ink-bright); }
+.qns-swatch__hex  { font-family: var(--qns-font-mono); font-size: var(--qns-size-xs); color: var(--qns-ink-faint); }
+.qns-swatch.is-copied .qns-swatch__hex { color: var(--qns-signal-memory); }
+
+/* ---------- Signal (SVG strokes) + Node ----------
+   Apply to <path>/<circle> inside inline SVG diagrams. */
+.qns-signal-stroke {
+  fill: none;
+  stroke: var(--qns-signal-discovery);
+  stroke-width: var(--qns-stroke-primary);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.qns-signal-stroke--passive { opacity: var(--qns-signal-passive-opacity); stroke-width: var(--qns-stroke-secondary); stroke: var(--qns-line-lume); }
+.qns-signal-stroke--active  { stroke-width: var(--qns-stroke-active); }
+.qns-signal-stroke--hero    { stroke-width: var(--qns-stroke-hero); }
+.qns-signal-stroke--flow {
+  stroke-dasharray: 10 14;
+  animation: qns-signal-flow var(--qns-duration-signal) linear infinite;
+}
+@keyframes qns-signal-flow { to { stroke-dashoffset: -96; } }
+.qns-node { fill: var(--qns-signal-discovery); }
+.qns-node--core { fill: var(--qns-core-white); }
+
+/* ---------- Icon system (24×24, Signal-Language, currentColor) ---------- */
+.qns-icon {
+  width: 24px; height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--qns-stroke-primary);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vertical-align: middle;
+  flex: none;
+}
+
+/* ---------- Logo lockup + nav ---------- */
+.qns-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--qns-space-3);
+  color: var(--qns-ink-bright);
+  text-decoration: none;
+}
+.qns-lockup__mark { width: 34px; height: 34px; display: block; }
+.qns-lockup__word {
+  font-family: var(--qns-font-wordmark);
+  font-weight: var(--qns-weight-extrabold);
+  font-size: var(--qns-size-xl);
+  letter-spacing: var(--qns-tracking-tight);
+  line-height: 1;
+}
+/* Core dot breathes; whole mark fires (nav-pulse) on hover — the SVG's
+   <animate> pulses have begin="indefinite" and are triggered by JS on hover,
+   plus a CSS glow ramp for immediate feedback. */
+.qns-lockup__mark { transition: filter var(--qns-duration-base) var(--qns-ease-standard); }
+.qns-lockup:hover .qns-lockup__mark,
+.nav-pulse .qns-lockup__mark { filter: drop-shadow(var(--qns-glow-ai)); }
+
+.qns-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(14px);
+  background: color-mix(in srgb, var(--qns-ground-void) 78%, transparent);
+  border-bottom: 1px solid var(--qns-line);
+}
+.qns-nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--qns-space-6);
+  padding: var(--qns-space-3) var(--qns-space-6);
+  max-width: 1160px;
+  margin: 0 auto;
+}
+.qns-nav__links { display: flex; align-items: center; gap: var(--qns-space-6); }
+.qns-nav__links a {
+  color: var(--qns-ink-dim);
+  font-size: var(--qns-size-sm);
+  font-weight: var(--qns-weight-semibold);
+}
+.qns-nav__links a:hover { color: var(--qns-ink-bright); text-shadow: var(--qns-glow-discovery); }
+
+/* ---------- Footer ---------- */
+.qns-footer {
+  border-top: 1px solid var(--qns-line);
+  padding: var(--qns-space-12) 0 var(--qns-space-16);
+  position: relative;
+}
+.qns-footer::before {
+  content: "";
+  position: absolute; top: -1px; left: 0; right: 0; height: 2px;
+  background: var(--qns-gradient-spectrum);
+  opacity: 0.8;
+}
+.qns-footer__grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--qns-space-8);
+}
+.qns-footer a { color: var(--qns-ink-dim); font-size: var(--qns-size-sm); display: block; margin-bottom: var(--qns-space-2); }
+.qns-footer a:hover { color: var(--qns-ink-bright); }
+.qns-footer h4 { font-size: var(--qns-size-sm); color: var(--qns-ink-faint); margin-bottom: var(--qns-space-3); }
+
+/* ---------- Grid helpers ---------- */
+.qns-grid { display: grid; gap: var(--qns-space-6); }
+.qns-grid--2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.qns-grid--3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.qns-grid--4 { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+
+/* ---------- Legend (signal roles) ---------- */
+.qns-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--qns-space-3) var(--qns-space-6);
+}
+
+/* ---------- Reduced motion: freeze everything ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  html { scroll-behavior: auto; }
+}

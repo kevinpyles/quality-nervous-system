@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QNS — Quality Nervous System</title>
+<meta name="description" content="QNS cockpit: an always-on testing and quality intelligence nervous system.">
+<link rel="icon" type="image/svg+xml" href="/design-system/icons/qns-favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/design-system/implementation/css/tokens.css">
+<link rel="stylesheet" href="/design-system/implementation/css/qns.css">
+<link rel="stylesheet" href="css/cockpit.css">
+</head>
+<body class="cockpit-body">
+
+<!-- ============ Top chrome: lockup + posture + live state ============ -->
+<header class="cockpit-top" id="cockpit-top">
+  <a class="qns-lockup" href="/" title="QNS — Quality Nervous System">
+    <img class="qns-lockup__mark" src="/design-system/icons/qns-logo-animated.svg" alt="QNS logo">
+    <span class="qns-lockup__word">QNS</span>
+  </a>
+  <span class="cockpit-top__app" id="top-app">Comparinator · local</span>
+  <span class="cockpit-top__posture" id="top-posture" data-posture="UNKNOWN">UNKNOWN</span>
+  <span class="cockpit-top__spacer"></span>
+  <button class="qns-btn cockpit-top__btn cockpit-top__claude" id="btn-ask-claude" type="button"
+    aria-haspopup="dialog" aria-expanded="false" aria-controls="chat" title="Ask Claude about QNS, runs or issues">
+    <span class="cockpit-top__claude-icon" id="btn-ask-claude-icon"></span>
+    <span>Ask Claude</span>
+    <span class="cockpit-top__claude-dot" id="btn-ask-claude-dot" hidden></span>
+  </button>
+  <button class="qns-btn qns-btn--ghost cockpit-top__btn" id="btn-fit-map" title="Fit the whole system map (F)">Fit map</button>
+  <button class="qns-btn qns-btn--ghost cockpit-top__btn" id="btn-reset-layout" title="Restore the default cockpit layout">Reset layout</button>
+</header>
+
+<!-- ============ The living map is the fixed central anchor ============ -->
+<main class="cockpit-stage">
+  <canvas id="qns-map3d" tabindex="0"
+    aria-label="Living system map of the Quality Nervous System. Signals flow left to right: the app under test, its sensor agents, and the runtime environment feed the QNS orchestrator core, which writes evidence memory, escalates to human guidance, and drives the release gate and bug-fix path. Click or use arrow keys to select nodes; scroll to zoom, drag to pan, F fits the map."></canvas>
+
+  <!-- rails overlay the map edges: black-glass instrument panels -->
+  <div class="rail rail--left" id="rail-left" data-zone="left">
+    <div class="rail__resize" data-rail="left" title="Drag to resize"></div>
+  </div>
+  <div class="rail rail--right" id="rail-right" data-zone="right">
+    <div class="rail__resize" data-rail="right" title="Drag to resize"></div>
+  </div>
+</main>
+
+<!-- ============ Status strip: persistent heartbeat ============ -->
+<footer class="status-strip" id="status-strip">
+  <span class="qns-signal-marker"><span class="qns-signal-marker__orb" id="heartbeat-orb"></span><span id="ss-heartbeat">system pulse</span></span>
+  <span class="status-strip__item" id="ss-service">QNS —</span>
+  <span class="status-strip__item" id="ss-target">target —</span>
+  <span class="status-strip__item" id="ss-stream">stream —</span>
+  <span class="status-strip__item" id="ss-build">build —</span>
+  <span class="status-strip__item" id="ss-open-ars">0 open actions</span>
+  <span class="cockpit-top__spacer"></span>
+  <span class="status-strip__item status-strip__clock" id="ss-clock"></span>
+</footer>
+
+<div id="toast-root" aria-live="polite"></div>
+
+<!-- ============ Claude chat pop-up (see js/chat.js) ============ -->
+<section class="chat" id="chat" role="dialog" aria-modal="false" aria-labelledby="chat-title" hidden></section>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

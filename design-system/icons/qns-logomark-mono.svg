@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="QNS logo, monochrome">
+  <!-- Mono variant: everything currentColor; edges at reduced opacity -->
+  <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.45">
+    <path d="M7 10 C 15 12, 18 18, 23 22"/>
+    <path d="M7 24 C 13 24, 17 24, 22 24"/>
+    <path d="M7 38 C 15 36, 18 30, 23 26"/>
+    <path d="M26 22 C 31 19, 35 17, 41 16"/>
+    <path d="M26 26 C 31 29, 35 31, 41 32"/>
+  </g>
+  <g fill="currentColor">
+    <circle cx="7" cy="10" r="3.4"/>
+    <circle cx="7" cy="24" r="3.4"/>
+    <circle cx="7" cy="38" r="3.4"/>
+    <circle cx="24" cy="24" r="4.6"/>
+    <circle cx="41" cy="16" r="3.4"/>
+    <circle cx="41" cy="32" r="3.4"/>
+  </g>
+</svg>

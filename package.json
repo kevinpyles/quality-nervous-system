@@ -1,0 +1,22 @@
+{
+  "name": "qns-app",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Quality Nervous System \u2014 always-on testing and quality intelligence cockpit",
+  "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "start": "node server/server.mjs",
+    "target": "node server/target-server.mjs",
+    "test": "node --test server/*.test.mjs"
+  },
+  "dependencies": {
+    "axe-core": "^4.10.0",
+    "pixelmatch": "^5.3.0",
+    "playwright": "^1.48.0",
+    "pngjs": "^7.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

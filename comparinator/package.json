@@ -1,0 +1,22 @@
+{
+  "name": "comparinator-chatgpt-2-plan",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test; ec=$?; node scripts/build-dashboard.js; exit $ec",
+    "test:headed": "playwright test --headed; ec=$?; node scripts/build-dashboard.js; exit $ec",
+    "test:report": "playwright show-report",
+    "dashboard": "node scripts/build-dashboard.js",
+    "dashboard:open": "open reports/dashboard.html",
+    "gap-analysis": "node scripts/build-gap-analysis.js",
+    "gap-analysis:open": "open reports/gap-analysis.html"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "http-server": "^14.1.1"
+  }
+}

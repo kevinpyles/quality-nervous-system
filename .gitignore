@@ -1,0 +1,10 @@
+node_modules/
+data/
+qns.config.json
+.DS_Store
+comparinator/test-results/
+comparinator/playwright-report/
+comparinator/graphify-out/
+comparinator/reports/dashboard.html
+comparinator/reports/history.json
+comparinator/reports/gap-analysis.html

@@ -1,0 +1,473 @@
+<title>Comparinator Quality Coverage</title>
+<style>
+  :root {
+    --bg: #f6f1e7; --bg-2: #efe7d8;
+    --panel: rgba(255,255,255,.66); --panel-strong: #fffdf8;
+    --border: rgba(140,105,40,.24); --line: rgba(90,70,40,.14);
+    --text: #221c14; --muted: #6f6455; --faint: #a89a83;
+    --gold: #a9750a; --gold-soft: rgba(169,117,10,.14); --gold-ring: rgba(169,117,10,.45);
+    --red: #b0231f; --red-soft: rgba(176,35,31,.12);
+    --green: #1f8a4c; --green-soft: rgba(31,138,76,.12);
+    /* confidence scale */
+    --c-strong: #2f8a57; --c-partial: #b98a1c; --c-weak: #c8622a; --c-gap: #b0231f; --c-unknown: #7a6f8a;
+    --cell-ink: #fffdf8; --cell-ink-soft: rgba(255,253,248,.82);
+    --neutral-cell: #8a7a60; --recede: #d9cfbd; --recede-ink: #6f6455;
+    --hatch: rgba(255,255,255,.28);
+    --shadow: 0 18px 44px rgba(80,55,20,.12);
+    --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --sans: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #16130f; --bg-2: #1e1a14;
+      --panel: rgba(30,26,20,.66); --panel-strong: #221d16;
+      --border: rgba(255,255,255,.12); --line: rgba(255,255,255,.08);
+      --text: #f5efe3; --muted: #b3a692; --faint: #7d7160;
+      --gold: #f2c14e; --gold-soft: rgba(242,193,78,.16); --gold-ring: rgba(255,215,106,.55);
+      --red: #ff6b5c; --red-soft: rgba(255,107,92,.16);
+      --green: #4ade91; --green-soft: rgba(74,222,145,.16);
+      --c-strong: #2c7a4f; --c-partial: #9c7417; --c-weak: #a8522a; --c-gap: #a8302a; --c-unknown: #625876;
+      --neutral-cell: #5e5341; --recede: #2a241c; --recede-ink: #8f8372;
+      --hatch: rgba(255,255,255,.18);
+      --shadow: 0 22px 60px rgba(0,0,0,.45);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #16130f; --bg-2: #1e1a14;
+    --panel: rgba(30,26,20,.66); --panel-strong: #221d16;
+    --border: rgba(255,255,255,.12); --line: rgba(255,255,255,.08);
+    --text: #f5efe3; --muted: #b3a692; --faint: #7d7160;
+    --gold: #f2c14e; --gold-soft: rgba(242,193,78,.16); --gold-ring: rgba(255,215,106,.55);
+    --red: #ff6b5c; --red-soft: rgba(255,107,92,.16);
+    --green: #4ade91; --green-soft: rgba(74,222,145,.16);
+    --c-strong: #2c7a4f; --c-partial: #9c7417; --c-weak: #a8522a; --c-gap: #a8302a; --c-unknown: #625876;
+    --neutral-cell: #5e5341; --recede: #2a241c; --recede-ink: #8f8372;
+    --hatch: rgba(255,255,255,.18);
+    --shadow: 0 22px 60px rgba(0,0,0,.45);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: var(--sans); font-size: 15px; line-height: 1.5;
+    background-image: radial-gradient(1200px 500px at 85% -10%, var(--gold-soft), transparent 60%);
+  }
+  .wrap { max-width: 1320px; margin: 0 auto; padding: 36px 24px 72px; display: grid; gap: 28px; }
+  h1, h2, h3 { text-wrap: balance; margin: 0; }
+  h1 { font-size: clamp(28px, 4vw, 42px); letter-spacing: -.02em; line-height: 1.1; }
+  h2 { font-size: 20px; letter-spacing: -.01em; }
+  .eyebrow { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); font-weight: 700; }
+  .muted { color: var(--muted); }
+  .mono { font-family: var(--mono); font-size: 12.5px; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  header.top { display: grid; gap: 14px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; color: var(--muted); font-size: 13px; }
+  .question { font-size: 17px; color: var(--muted); max-width: 70ch; margin: 0; }
+
+  .verdict {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px;
+    padding: 18px 22px; border-radius: 18px; background: var(--panel-strong);
+    border: 1px solid var(--border); box-shadow: var(--shadow);
+  }
+  .pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px; font-weight: 700; font-size: 14px; border: 1.5px solid currentColor; }
+  .pill.ready { color: var(--green); background: var(--green-soft); }
+  .pill.risk { color: var(--gold); background: var(--gold-soft); }
+  .pill.notready { color: var(--red); background: var(--red-soft); }
+  .verdict p { margin: 0; flex: 1 1 380px; }
+
+  .summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+  @media (max-width: 1000px) { .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 560px) { .summary { grid-template-columns: 1fr; } }
+  .summary div { background: var(--panel-strong); padding: 14px 16px; display: grid; gap: 4px; align-content: start; }
+  .summary dt { font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  .summary dd { margin: 0; font-weight: 600; }
+  .summary dd small { display: block; font-weight: 400; color: var(--muted); font-size: 13px; }
+
+  .views { display: flex; flex-wrap: wrap; gap: 6px; padding: 5px; border-radius: 14px; background: var(--bg-2); border: 1px solid var(--line); width: fit-content; max-width: 100%; }
+  .views button {
+    font: inherit; font-size: 14px; font-weight: 600; color: var(--muted);
+    background: transparent; border: 0; padding: 8px 14px; border-radius: 10px; cursor: pointer;
+  }
+  .views button[aria-selected="true"] { background: var(--panel-strong); color: var(--text); box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+  .views button:focus-visible, .cell:focus-visible, .dimlabel:focus-visible, button:focus-visible { outline: 3px solid var(--gold-ring); outline-offset: 2px; }
+  .viewq { margin: 0; color: var(--muted); }
+  .viewq strong { color: var(--text); }
+
+  .mapgrid { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px; align-items: start; }
+  @media (max-width: 960px) { .mapgrid { grid-template-columns: 1fr; } }
+
+  .treemap { position: relative; width: 100%; height: 860px; border-radius: 16px; overflow: hidden; background: var(--bg-2); border: 1px solid var(--line); }
+  @media (max-width: 700px) { .treemap { height: 1200px; } }
+  .dim { position: absolute; border: 2px solid var(--bg); border-radius: 10px; overflow: hidden; }
+  .dimlabel {
+    position: absolute; left: 0; right: 0; top: 0; height: 28px; padding: 5px 9px;
+    font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+    background: var(--panel-strong); color: var(--text); display: flex; gap: 8px; align-items: center; white-space: nowrap; overflow: hidden;
+  }
+  .dimlabel .owner { font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--muted); overflow: hidden; text-overflow: ellipsis; }
+  .dimlabel .owner.none { color: var(--red); font-weight: 700; }
+  .cell {
+    position: absolute; border: 1.5px solid var(--bg); border-radius: 6px; padding: 5px 7px;
+    color: var(--cell-ink); background: var(--neutral-cell); cursor: pointer; text-align: left;
+    font: inherit; overflow: hidden; display: flex; flex-direction: column; gap: 2px;
+    transition: background-color .25s ease, color .25s ease, opacity .25s ease;
+  }
+  .cell .nm { font-size: 12.5px; font-weight: 650; line-height: 1.2; hyphens: auto; overflow-wrap: break-word; }
+  .cell .sub { font-size: 11px; color: var(--cell-ink-soft); line-height: 1.2; }
+  .cell .marks { margin-top: auto; align-self: flex-end; font-size: 13px; font-weight: 800; letter-spacing: 1px; line-height: 1; }
+  .cell.tiny { padding: 3px; align-items: center; justify-content: center; }
+  .cell.tiny .nm, .cell.tiny .sub { display: none; }
+  .cell.tiny .marks { margin: 0; align-self: center; }
+  .cell.small .sub { display: none; }
+  .cell.small .nm { font-size: 11px; }
+  .cell[aria-pressed="true"] { box-shadow: inset 0 0 0 3px var(--gold-ring); }
+  .cell.hatch { background-image: repeating-linear-gradient(135deg, var(--hatch) 0 5px, transparent 5px 11px); }
+  .cell.dots { background-image: radial-gradient(var(--hatch) 1.4px, transparent 1.6px); background-size: 8px 8px; }
+  .cell.receded { background-color: var(--recede) !important; color: var(--recede-ink); background-image: none; }
+  .cell.receded .sub { color: var(--recede-ink); }
+  .cell.flag { box-shadow: inset 0 0 0 3px var(--text); }
+  @media (prefers-reduced-motion: reduce) { .cell { transition: none; } }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 13px; color: var(--muted); margin-top: 10px; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .sw { width: 16px; height: 12px; border-radius: 3px; display: inline-block; border: 1px solid var(--line); }
+
+  aside.detail { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); background: var(--panel-strong); border: 1px solid var(--border); border-radius: 16px; padding: 18px; display: grid; gap: 12px; box-shadow: var(--shadow); }
+  aside.detail h3 { font-size: 18px; }
+  .kv { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; font-size: 13.5px; margin: 0; }
+  .kv dt { color: var(--muted); }
+  .kv dd { margin: 0; font-weight: 600; }
+  .detail p { margin: 0; font-size: 13.5px; }
+  .detail .label { font-size: 11.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; }
+
+  section.block { display: grid; gap: 14px; }
+  .tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--panel-strong); }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+  th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); background: var(--bg-2); position: sticky; top: 0; }
+  td.ev { color: var(--muted); max-width: 46ch; }
+  tr.dimrow td { background: var(--bg-2); font-weight: 700; }
+  .tag { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 12px; font-weight: 700; white-space: nowrap; border: 1px solid currentColor; }
+  .t-Strong { color: var(--green); } .t-Partial { color: var(--gold); } .t-Weak { color: #c8622a; }
+  .t-Gap, .t-Unknown { color: var(--red); }
+  .t-Unknown { color: var(--muted); }
+  .p-Critical { color: var(--red); background: var(--red-soft); }
+  .p-High { color: #c8622a; }
+  .p-Medium { color: var(--gold); }
+  .p-Low { color: var(--muted); }
+  .gaplist { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
+  .gaplist li { background: var(--panel-strong); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; display: grid; gap: 4px; }
+  .gaplist .top { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+  .foot { color: var(--muted); font-size: 13px; display: grid; gap: 6px; }
+  .foot p { margin: 0; max-width: 90ch; }
+</style>
+
+<div class="wrap" lang="en">
+  <header class="top">
+    <div class="eyebrow">Comparinator · Gap analysis</div>
+    <h1>Quality Coverage</h1>
+    <p class="question">What do we know about the quality of Comparinator, and what don’t we know? Rectangle size shows product risk. It does not show how many tests ran.</p>
+    <div class="meta" id="meta"></div>
+  </header>
+
+  <div class="verdict" id="verdict"></div>
+
+  <dl class="summary" id="summary"></dl>
+
+  <section class="block" aria-labelledby="maph">
+    <h2 id="maph">Quality coverage treemap</h2>
+    <div class="views" role="tablist" aria-label="Treemap view" id="views"></div>
+    <p class="viewq" id="viewq" aria-live="polite"></p>
+    <div class="mapgrid">
+      <div>
+        <div class="treemap" id="treemap" role="group" aria-label="Quality coverage treemap. Each button is a quality area; the full data is also in the table below."></div>
+        <div class="legend" id="legend"></div>
+      </div>
+      <aside class="detail" id="detail" aria-live="polite"></aside>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="gaph">
+    <h2 id="gaph">What to test next</h2>
+    <p class="muted" style="margin:0">Gap priority = product risk × evidence deficit (Strong 0, Partial 0.35, Weak 0.7, Gap/Unknown 1.0). Areas with an open defect or no owner are raised one level.</p>
+    <ol class="gaplist" id="gaplist"></ol>
+  </section>
+
+  <section class="block" aria-labelledby="tabh">
+    <h2 id="tabh">All quality areas</h2>
+    <p class="muted" style="margin:0">This table holds the same data as the treemap, as text.</p>
+    <div class="tablewrap"><table id="table"></table></div>
+  </section>
+
+  <footer class="foot" id="foot"></footer>
+</div>
+
+<script id="gap-data" type="application/json">/*__DATA__*/</script>
+<script>
+(function () {
+  const D = JSON.parse(document.getElementById('gap-data').textContent);
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  const DEFICIT = { Strong: 0, Partial: 0.35, Weak: 0.7, Gap: 1, Unknown: 1 };
+  const CONF_VAR = { Strong: '--c-strong', Partial: '--c-partial', Weak: '--c-weak', Gap: '--c-gap', Unknown: '--c-unknown' };
+  const CONF_SYM = { Strong: '●', Partial: '◐', Weak: '○', Gap: '✕', Unknown: '?' };
+  const CONF_PAT = { Strong: '', Partial: '', Weak: 'dots', Gap: 'hatch', Unknown: 'hatch' };
+  const ISSUE_SYM = { 'None': '', 'Known issue': '!', 'Significant risk': '!!', 'Blocker': '⛔' };
+  const ISSUE_RANK = { 'None': 0, 'Known issue': 1, 'Significant risk': 2, 'Blocker': 3 };
+  const OWNER_COLORS = ['#3b6ea8', '#7a4fa0', '#2f8a7a', '#a0664f', '#5a7d2e', '#a04f7a', '#4f5aa0'];
+
+  // Derived fields
+  const areas = [];
+  D.dimensions.forEach((dim) => dim.areas.forEach((a) => {
+    a.dim = dim; a.owner = a.owner || dim.owner || null;
+    a.priorityScore = +(a.risk * (DEFICIT[a.confidence] ?? 1)).toFixed(2);
+    let lvl = a.priorityScore >= 6 ? 3 : a.priorityScore >= 4 ? 2 : a.priorityScore >= 2 ? 1 : 0;
+    if (lvl < 3 && ((ISSUE_RANK[a.issue] || 0) >= 2 || (!a.owner && a.priorityScore >= 2))) lvl += 1;
+    if ((ISSUE_RANK[a.issue] || 0) === 3) lvl = 3;
+    a.priority = ['Low', 'Medium', 'High', 'Critical'][lvl];
+    areas.push(a);
+  }));
+  const owners = [...new Set(D.dimensions.map((d) => d.owner).filter(Boolean))];
+  const ownerColor = (o) => o ? OWNER_COLORS[owners.indexOf(o) % OWNER_COLORS.length] : null;
+
+  // Header, verdict, summary
+  $('meta').innerHTML = D.meta.map(([k, v]) => `<span>${esc(k)}: <span class="mono">${esc(v)}</span></span>`).join('');
+  const vc = { 'Ready': 'ready', 'Ready with known risk': 'risk' }[D.recommendation.label] || 'notready';
+  $('verdict').innerHTML = `<span class="pill ${vc}">${esc(D.recommendation.label)}</span><p>${esc(D.recommendation.reason)}</p>`;
+
+  const byPriority = [...areas].sort((a, b) => b.priorityScore - a.priorityScore || b.risk - a.risk);
+  const riskiest = [...areas].sort((a, b) => b.risk - a.risk)[0];
+  const unknowns = areas.filter((a) => a.confidence === 'Gap' || a.confidence === 'Unknown').sort((a, b) => b.risk - a.risk);
+  const dimStrength = D.dimensions.map((d) => {
+    const w = d.areas.reduce((s, a) => s + a.risk, 0);
+    return { d, score: d.areas.reduce((s, a) => s + a.risk * (1 - (DEFICIT[a.confidence] ?? 1)), 0) / w };
+  }).sort((a, b) => b.score - a.score);
+  const crit = areas.filter((a) => ISSUE_RANK[a.issue] >= 2);
+  const known = areas.filter((a) => ISSUE_RANK[a.issue] >= 1);
+  const unowned = D.dimensions.filter((d) => !d.owner);
+  const overall = areas.reduce((s, a) => s + a.risk * (1 - (DEFICIT[a.confidence] ?? 1)), 0) / areas.reduce((s, a) => s + a.risk, 0);
+  const overallWord = overall >= 0.75 ? 'Moderate to high' : overall >= 0.55 ? 'Moderate' : overall >= 0.35 ? 'Low to moderate' : 'Low';
+
+  const sum = [
+    ['Evidence coverage', `${overallWord}`, `About ${Math.round(overall * 100)}% of the risk-weighted scope has test evidence. This measures what we know, not how good the product is. Open defects are listed separately.`],
+    ['Highest-risk area', riskiest.name, `${riskiest.dim.name} · risk ${riskiest.risk}/10 · ${riskiest.confidence}`],
+    ['Highest-priority gap', byPriority[0].name, `${byPriority[0].dim.name} · ${byPriority[0].confidence} · priority ${byPriority[0].priorityScore}`],
+    ['Largest unknown', unknowns[0] ? unknowns[0].name : 'None', unknowns[0] ? `${unknowns[0].dim.name} · risk ${unknowns[0].risk}/10 · ${unknowns[0].confidence}` : ''],
+    ['Strongest evidence', dimStrength[0].d.name, `${Math.round(dimStrength[0].score * 100)}% of its risk-weighted scope is covered`],
+    ['Known defects', `${known.length} area${known.length === 1 ? '' : 's'} with an open issue`, crit.length ? `${crit.length} marked significant or blocker: ${crit.map((a) => a.name).join(', ')}` : 'None marked significant or blocker'],
+    ['Unowned areas', unowned.length ? unowned.map((d) => d.name).join(', ') : 'None', unowned.length ? 'No specialist agent owns these areas yet.' : ''],
+    ['Next testing action', D.nextAction.title, D.nextAction.detail],
+  ];
+  $('summary').innerHTML = sum.map(([k, v, s]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}${s ? `<small>${esc(s)}</small>` : ''}</dd></div>`).join('');
+
+  // Squarified treemap
+  function squarify(items, x, y, w, h) {
+    const total = items.reduce((s, i) => s + i.value, 0);
+    const scale = (w * h) / total;
+    const nodes = items.map((i) => ({ item: i, area: i.value * scale })).sort((a, b) => b.area - a.area);
+    const out = [];
+    let rect = { x, y, w, h };
+    let row = [];
+    const worst = (r, side) => {
+      const s = r.reduce((t, n) => t + n.area, 0);
+      const mx = Math.max(...r.map((n) => n.area)), mn = Math.min(...r.map((n) => n.area));
+      return Math.max((side * side * mx) / (s * s), (s * s) / (side * side * mn));
+    };
+    const layoutRow = (r) => {
+      const s = r.reduce((t, n) => t + n.area, 0);
+      if (rect.w >= rect.h) {
+        const cw = s / rect.h; let cy = rect.y;
+        r.forEach((n) => { const ch = n.area / cw; out.push({ item: n.item, x: rect.x, y: cy, w: cw, h: ch }); cy += ch; });
+        rect = { x: rect.x + cw, y: rect.y, w: rect.w - cw, h: rect.h };
+      } else {
+        const ch = s / rect.w; let cx = rect.x;
+        r.forEach((n) => { const cw = n.area / ch; out.push({ item: n.item, x: cx, y: rect.y, w: cw, h: ch }); cx += cw; });
+        rect = { x: rect.x, y: rect.y + ch, w: rect.w, h: rect.h - ch };
+      }
+    };
+    nodes.forEach((n) => {
+      const side = Math.min(rect.w, rect.h);
+      if (!row.length || worst([...row, n], side) <= worst(row, side)) row.push(n);
+      else { layoutRow(row); row = [n]; }
+    });
+    if (row.length) layoutRow(row);
+    return out;
+  }
+
+  const VIEWS = [
+    { id: 'risk', label: 'Product risk', q: '<strong>What matters most?</strong> Size and shade both show risk. Confidence is hidden in this view.' },
+    { id: 'coverage', label: 'Quality coverage', q: '<strong>What have we tested, and how strong is the evidence?</strong> Colour, symbol and pattern show the confidence level.' },
+    { id: 'gap', label: 'Gap map', q: '<strong>Where are the biggest unknowns?</strong> Well-covered areas fade into the background. Higher-priority gaps stand out more.' },
+    { id: 'findings', label: 'Findings', q: '<strong>What do we know is wrong?</strong> Areas with open defects are outlined and marked. A well-tested area with a defect still stands out.' },
+    { id: 'owner', label: 'Agent ownership', q: '<strong>Who owns each quality area?</strong> Colour shows the owning agent. Hatched red means no agent owns the area.' },
+  ];
+  let view = 'coverage';
+  let selected = byPriority[0];
+
+  const cssVar = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+  function styleCell(el, a) {
+    el.className = 'cell';
+    el.style.backgroundColor = '';
+    el.style.opacity = '';
+    const sz = el.dataset.size;
+    if (sz) el.classList.add(sz);
+    let marks = '';
+    if (view === 'risk') {
+      el.style.backgroundColor = cssVar('--neutral-cell');
+      el.style.opacity = String(0.45 + a.risk * 0.055);
+      marks = String(a.risk);
+    } else if (view === 'coverage') {
+      el.style.backgroundColor = cssVar(CONF_VAR[a.confidence]);
+      if (CONF_PAT[a.confidence]) el.classList.add(CONF_PAT[a.confidence]);
+      marks = CONF_SYM[a.confidence] + (ISSUE_SYM[a.issue] ? ' ' + ISSUE_SYM[a.issue] : '');
+    } else if (view === 'gap') {
+      if (a.priority === 'Low') { el.classList.add('receded'); marks = ''; }
+      else {
+        el.style.backgroundColor = cssVar(CONF_VAR[a.confidence]);
+        el.style.opacity = { Medium: '0.62', High: '0.85', Critical: '1' }[a.priority];
+        if (CONF_PAT[a.confidence]) el.classList.add(CONF_PAT[a.confidence]);
+        if (a.priority === 'Critical') el.classList.add('flag');
+        marks = CONF_SYM[a.confidence];
+      }
+    } else if (view === 'findings') {
+      const r = ISSUE_RANK[a.issue] || 0;
+      if (!r) { el.classList.add('receded'); marks = CONF_SYM[a.confidence]; }
+      else {
+        el.style.backgroundColor = cssVar(r >= 2 ? '--c-gap' : '--c-weak');
+        el.classList.add('flag');
+        if (r >= 3) el.classList.add('hatch');
+        marks = ISSUE_SYM[a.issue];
+      }
+    } else if (view === 'owner') {
+      if (!a.owner) { el.style.backgroundColor = cssVar('--c-gap'); el.classList.add('hatch'); marks = '∅'; }
+      else { el.style.backgroundColor = ownerColor(a.owner); marks = ''; }
+    }
+    if (selected === a) el.setAttribute('aria-pressed', 'true'); else el.setAttribute('aria-pressed', 'false');
+    el.querySelector('.marks').textContent = marks;
+    const sub = {
+      risk: `Risk ${a.risk}/10`,
+      coverage: a.confidence + (a.issue !== 'None' ? ` · ${a.issue}` : ''),
+      gap: `${a.priority} · ${a.priorityScore}`,
+      findings: a.issue === 'None' ? 'No known issue' : a.issue,
+      owner: a.owner || 'No owner',
+    }[view];
+    el.querySelector('.sub').textContent = sub;
+    el.setAttribute('aria-label', `${a.name}, ${a.dim.name}. Risk ${a.risk} of 10. Confidence ${a.confidence}. ${a.issue === 'None' ? 'No known issue' : a.issue}. Gap priority ${a.priority}. Owner ${a.owner || 'none'}.`);
+  }
+
+  const cellEls = new Map();
+  function layout() {
+    const box = $('treemap');
+    const W = box.clientWidth, H = box.clientHeight;
+    box.innerHTML = '';
+    cellEls.clear();
+    const dims = D.dimensions.map((d) => ({ value: d.weight, d }));
+    squarify(dims, 0, 0, W, H).forEach((r) => {
+      const d = r.item.d;
+      const dv = document.createElement('div');
+      dv.className = 'dim';
+      Object.assign(dv.style, { left: r.x + 'px', top: r.y + 'px', width: r.w + 'px', height: r.h + 'px' });
+      const lab = document.createElement('div');
+      lab.className = 'dimlabel';
+      lab.innerHTML = `<span>${esc(d.name)}</span><span class="owner ${d.owner ? '' : 'none'}">${d.owner ? esc(d.owner) : 'No owner'}</span>`;
+      dv.appendChild(lab);
+      box.appendChild(dv);
+      const iw = r.w - 4, ih = r.h - 4 - 28;
+      if (iw <= 0 || ih <= 0) return;
+      squarify(d.areas.map((a) => ({ value: a.risk, a })), 0, 28, iw, ih).forEach((c) => {
+        const el = document.createElement('button');
+        el.type = 'button';
+        Object.assign(el.style, { left: c.x + 'px', top: c.y + 'px', width: c.w + 'px', height: c.h + 'px' });
+        el.dataset.size = (c.w < 62 || c.h < 40) ? 'tiny' : (c.w < 100 || c.h < 62) ? 'small' : '';
+        el.innerHTML = `<span class="nm">${esc(c.item.a.name)}</span><span class="sub"></span><span class="marks" aria-hidden="true"></span>`;
+        el.title = `${c.item.a.name}: risk ${c.item.a.risk}, ${c.item.a.confidence}, ${c.item.a.issue}`;
+        el.addEventListener('click', () => select(c.item.a));
+        dv.appendChild(el);
+        cellEls.set(c.item.a, el);
+      });
+    });
+    paint();
+  }
+  function paint() { cellEls.forEach((el, a) => styleCell(el, a)); }
+
+  function select(a) {
+    selected = a;
+    paint();
+    const oc = a.owner ? esc(a.owner) : '<span style="color:var(--red)">No owner</span>';
+    $('detail').innerHTML = `
+      <div class="label">${esc(a.dim.name)}</div>
+      <h3>${esc(a.name)}</h3>
+      <dl class="kv">
+        <dt>Risk</dt><dd class="num">${a.risk} / 10</dd>
+        <dt>Confidence</dt><dd><span class="tag t-${a.confidence}">${CONF_SYM[a.confidence]} ${esc(a.confidence)}</span></dd>
+        <dt>Known issue</dt><dd>${ISSUE_SYM[a.issue] ? `<strong>${esc(ISSUE_SYM[a.issue])}</strong> ` : ''}${esc(a.issue)}</dd>
+        <dt>Gap priority</dt><dd><span class="tag p-${a.priority}">${a.priority}</span> <span class="num muted">${a.priorityScore}</span></dd>
+        <dt>Owner</dt><dd>${oc}</dd>
+      </dl>
+      <div><div class="label">Evidence</div><p>${esc(a.evidence || 'None recorded')}</p></div>
+      ${a.notes ? `<div><div class="label">Notes</div><p>${esc(a.notes)}</p></div>` : ''}
+      <div class="muted" style="font-size:12px">Source: <span class="mono">${esc(a.dim.source || 'n/a')}</span></div>`;
+  }
+
+  // View tabs
+  $('views').innerHTML = VIEWS.map((v) => `<button role="tab" id="tab-${v.id}" aria-selected="${v.id === view}" tabindex="${v.id === view ? 0 : -1}" aria-controls="treemap">${v.label}</button>`).join('');
+  const tabs = [...$('views').querySelectorAll('button')];
+  function setView(id, focus) {
+    view = id;
+    tabs.forEach((t) => { const on = t.id === 'tab-' + id; t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1; if (on && focus) t.focus(); });
+    $('viewq').innerHTML = VIEWS.find((v) => v.id === id).q;
+    legend();
+    paint();
+  }
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => setView(VIEWS[i].id));
+    t.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        const n = (i + (e.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+        setView(VIEWS[n].id, true);
+      }
+    });
+  });
+
+  function legend() {
+    const sw = (v, cls = '') => `<i class="sw ${cls}" style="background-color:var(${v})"></i>`;
+    let h = '';
+    if (view === 'risk') h = `<span>Larger rectangle = higher risk</span><span>Darker shade = higher risk</span><span>Number = risk score (1–10)</span><span>Dimension weights: ${D.dimensions.map((d) => `${esc(d.name)} ${d.weight}`).join(' · ')}</span>`;
+    if (view === 'coverage' || view === 'gap') h = ['Strong', 'Partial', 'Weak', 'Gap', 'Unknown'].map((c) => `<span>${sw(CONF_VAR[c])} ${CONF_SYM[c]} ${c}${CONF_PAT[c] ? ` (${CONF_PAT[c] === 'hatch' ? 'hatched' : 'dotted'})` : ''}</span>`).join('') + (view === 'coverage' ? '<span><b>!</b> known issue</span><span><b>!!</b> significant risk</span><span><b>⛔</b> blocker</span>' : '<span>Faded = low priority</span><span>Heavy outline = critical gap</span>');
+    if (view === 'findings') h = `<span>${sw('--c-weak')} <b>!</b> Known issue</span><span>${sw('--c-gap')} <b>!!</b> Significant risk</span><span>${sw('--c-gap')} <b>⛔</b> Blocker (hatched)</span><span>Faded = no known issue</span>`;
+    if (view === 'owner') h = owners.map((o) => `<span><i class="sw" style="background:${ownerColor(o)}"></i> ${esc(o)}</span>`).join('') + `<span>${sw('--c-gap', 'hatch')} ∅ No owner</span>`;
+    $('legend').innerHTML = h;
+  }
+
+  // Gap list
+  $('gaplist').innerHTML = byPriority.filter((a) => a.priority !== 'Low').slice(0, 9).map((a) => `
+    <li><div class="top"><strong>${esc(a.name)}</strong><span class="tag p-${a.priority}">${a.priority}</span></div>
+    <span class="muted" style="font-size:13px">${esc(a.dim.name)} · risk ${a.risk} · ${CONF_SYM[a.confidence]} ${esc(a.confidence)}${a.issue !== 'None' ? ' · ' + esc(a.issue) : ''} · ${a.owner ? esc(a.owner) : 'no owner'}</span>
+    <span style="font-size:13.5px">${esc(a.notes || a.evidence || '')}</span></li>`).join('');
+
+  // Table
+  let t = '<thead><tr><th scope="col">Area</th><th scope="col">Risk</th><th scope="col">Confidence</th><th scope="col">Known issue</th><th scope="col">Gap priority</th><th scope="col">Owner</th><th scope="col">Evidence</th></tr></thead><tbody>';
+  D.dimensions.forEach((d) => {
+    t += `<tr class="dimrow"><td colspan="7">${esc(d.name)}, weight ${d.weight}, ${d.owner ? 'owned by ' + esc(d.owner) : 'no owner'}${d.source ? ` · <span class="mono">${esc(d.source)}</span>` : ''}</td></tr>`;
+    [...d.areas].sort((a, b) => b.risk - a.risk).forEach((a) => {
+      t += `<tr><th scope="row" style="text-transform:none;letter-spacing:0;font-size:13.5px;color:var(--text);background:none;position:static">${esc(a.name)}</th><td class="num">${a.risk}</td><td><span class="tag t-${a.confidence}">${CONF_SYM[a.confidence]} ${a.confidence}</span></td><td>${esc(a.issue)}</td><td><span class="tag p-${a.priority}">${a.priority}</span></td><td>${a.owner ? esc(a.owner) : '<strong style="color:var(--red)">None</strong>'}</td><td class="ev">${esc(a.evidence)}</td></tr>`;
+    });
+  });
+  $('table').innerHTML = t + '</tbody>';
+
+  $('foot').innerHTML = D.footnotes.map((f) => `<p>${esc(f)}</p>`).join('');
+
+  setView(view);
+  layout();
+  select(selected);
+  let rt;
+  new ResizeObserver(() => { clearTimeout(rt); rt = setTimeout(layout, 60); }).observe($('treemap'));
+  // Repaint colours when the theme changes (colours are read from CSS variables)
+  new MutationObserver(paint).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', paint);
+})();
+</script>
