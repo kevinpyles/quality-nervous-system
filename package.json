@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "description": "Quality Nervous System \u2014 always-on testing and quality intelligence cockpit",
+  "license": "MIT",
   "scripts": {
     "setup": "node scripts/setup.mjs",
     "start": "node server/server.mjs",

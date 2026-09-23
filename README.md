@@ -75,3 +75,7 @@ Relative paths resolve against the repo root. **Note:** the cockpit has no login
 | `design-system/` | The QNS Design System tokens, component CSS and icons the cockpit loads |
 | `scripts/setup.mjs` | `npm run setup` |
 | `data/` | Run history, decisions, artifacts, evidence, chats (created at runtime, gitignored) |
+
+## License
+
+[MIT](LICENSE) — free to use, copy, modify and share, including commercially, as long as the copyright notice travels with it. Covers everything in this repo: QNS, `comparinator/` and `design-system/`.
